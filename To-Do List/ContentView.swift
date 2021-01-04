@@ -7,50 +7,54 @@
 
 import SwiftUI
 
+struct Task: Identifiable {
+    var id = UUID()
+    @State var checked = false
+    @State var text = ""
+}
+
 struct ContentView: View {
-    @State private var checked = false
+    
+    @State private var tasks_array = [Task(checked: false, text: "")]
+    
     var body: some View {
         VStack {
-            HStack {
-                Text("To-Do List")
-                    .foregroundColor(Color.blue)
-                    .padding()
-            }
+            Text("To-Do List").bold()
+                .foregroundColor(Color.blue)
+                .padding()
             
             HStack {
                 Spacer()
-                Button(action: {}, label: {
-                    HStack {
-                        Text("New")
-                        Image(systemName: "plus")
-                            .padding([.top, .bottom, .trailing])
-                        
-                    }
+                
+                Button(action: {tasks_array.append(Task(checked: false, text: ""))}, label: {
+                    Image(systemName: "plus")
+                        .padding()
                 })
             }
-            HStack {
-                Button(action: {
-                    checked = !checked
-                },
-                label: {
-                    ZStack {
-                        if !checked {
-                            Image(systemName: "square").padding()
-                        }
-                        if checked {
-                            Image(systemName: "checkmark.square").padding()
-                        }
+             
+            ForEach(tasks_array, id: \.id) {task in
+                HStack {
+                    Button(action: {task.checked = !task.checked}, label: {
+                        Image(systemName: task.checked ? "checkmark.square" : "square")
+                            .padding(5).padding(.leading)
+                    })
+
+                    if task.text == "" {
+                        TextField("Task", text: task.$text)
                     }
-                })
-                Text("Hello world!")
-                Spacer()
+                    else {
+                        Text("\(task.id)")
+                    }
+                    
+                    Spacer()
+                }
             }
+            
             Spacer()
         }
-        .coordinateSpace(name: /*@START_MENU_TOKEN@*/CoordinateSpace.local/*@END_MENU_TOKEN@*/)
-        
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
