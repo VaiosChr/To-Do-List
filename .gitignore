@@ -1,0 +1,14 @@
+/.dart_tool
+/.idea
+/.metadata
+/.packages
+/.vscode
+/android
+/build
+/ios
+/pubspec.lock
+/pubspec.yaml
+/README.md
+/test
+/to_do_list.iml
+/web
