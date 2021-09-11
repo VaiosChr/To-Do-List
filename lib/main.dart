@@ -2,9 +2,13 @@ import "package:flutter/material.dart";
 
 import "./task.dart";
 
-void main() => runApp(MyApp());
+void main() => runApp(MyApp(streamController.stream));
 
 class MyApp extends StatefulWidget {
+  final Stream<int> stream;
+
+  MyApp(this.stream);
+
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
@@ -12,9 +16,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int taskCounter = 0;
   int _currentIndex = 0;
-  var tasks = [Task()];
   final tabs = ["Home", "Settings"];
+  var tasks = [Task(0)];
+
+  void deleteTaskAt(int index) {
+    for (int i = index + 1; i < tasks.length; i++) {
+      tasks[i].setId(tasks[i].getId() - 1);
+    }
+
+    setState(() => tasks.removeAt(index));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.stream.listen((index) {
+      deleteTaskAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            ...tasks.map((task) => Task()).toList(),
+            ...tasks.map((task) => Task(0)).toList(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -37,27 +58,28 @@ class _MyAppState extends State<MyApp> {
           ),
           child: Icon(Icons.add),
           onPressed: () {
-            setState(() => tasks.add(Task()));
+            setState(() => tasks.add(Task(++taskCounter)));
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentIndex,
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.grey,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_rounded),
-                label: "Home",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: "Settings",
-              )
-            ],
-            onTap: (index) {
-              setState(() => _currentIndex = index);
-            }),
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "Settings",
+            )
+          ],
+          onTap: (index) {
+            setState(() => _currentIndex = index);
+          },
+        ),
       ),
     );
   }
