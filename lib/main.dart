@@ -16,17 +16,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int taskCounter = 0;
   int _currentIndex = 0;
   final tabs = ["Home", "Settings"];
   var tasks = [Task(0)];
 
   void deleteTaskAt(int index) {
+    print("the index is: " + index.toString());
+    setState(() => tasks.removeAt(index));
+
     for (int i = index + 1; i < tasks.length; i++) {
       tasks[i].setId(tasks[i].getId() - 1);
     }
-
-    setState(() => tasks.removeAt(index));
+    for (int i = 0; i < tasks.length; i++) print(tasks[i].getId());
   }
 
   @override
@@ -47,10 +48,11 @@ class _MyAppState extends State<MyApp> {
           ),
           title: Text(tabs[_currentIndex]),
         ),
-        body: Column(
-          children: [
-            ...tasks.map((task) => Task(0)).toList(),
-          ],
+        body: ListView.builder(
+          itemCount: tasks.length,
+          itemBuilder: (BuildContext context, int index) {
+            return tasks[index];
+          },
         ),
         floatingActionButton: FloatingActionButton(
           shape: RoundedRectangleBorder(
@@ -58,7 +60,9 @@ class _MyAppState extends State<MyApp> {
           ),
           child: Icon(Icons.add),
           onPressed: () {
-            setState(() => tasks.add(Task(++taskCounter)));
+            //DEBUG:
+            // print(tasks.length);
+            setState(() => tasks.add(Task(tasks.length)));
           },
         ),
         bottomNavigationBar: BottomNavigationBar(

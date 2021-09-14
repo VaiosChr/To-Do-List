@@ -4,28 +4,23 @@ import "dart:async";
 StreamController<int> streamController = StreamController<int>();
 
 class Task extends StatefulWidget {
-  int _id = -1;
+  int _id = 0;
 
   Task(this._id);
 
   void setId(int id) => this._id = id;
 
-  int getId() {
-    return this._id;
-  }
+  int getId() => this._id;
 
   @override
   State<StatefulWidget> createState() {
-    return _TaskState(this._id);
+    return _TaskState();
   }
 }
 
 class _TaskState extends State<Task> {
-  int _id = -1;
   bool _checked = false;
   TextEditingController _controller = TextEditingController(text: "");
-
-  _TaskState(this._id);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +47,8 @@ class _TaskState extends State<Task> {
           onPressed: () {
             setState(() {
               //TODO: implement the deletion algorithm
-              streamController.add(this._id);
+              print(widget._id);
+              streamController.add(widget._id);
             });
           },
         ),
