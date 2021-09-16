@@ -4,6 +4,7 @@ import "./task.dart";
 
 void main() => runApp(MyApp(streamController.stream));
 
+//the main class of the app
 class MyApp extends StatefulWidget {
   final Stream<int> stream;
 
@@ -20,21 +21,20 @@ class _MyAppState extends State<MyApp> {
   final tabs = ["Home", "Settings"];
   var tasks = [Task(0)];
 
+  //deletes the task at the index provided as an argument 
   void deleteTaskAt(int index) {
-    print("the index is: " + index.toString());
     setState(() => tasks.removeAt(index));
 
     for (int i = index + 1; i < tasks.length; i++) {
       tasks[i].setId(tasks[i].getId() - 1);
     }
-    for (int i = 0; i < tasks.length; i++) print(tasks[i].getId());
   }
 
   @override
   void initState() {
     super.initState();
     widget.stream.listen((index) {
-      deleteTaskAt(index);
+      deleteTaskAt(0);
     });
   }
 
@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
           ),
           title: Text(tabs[_currentIndex]),
         ),
+        //the problem lies here, while displaying the list!!!
         body: ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (BuildContext context, int index) {
