@@ -1,63 +1,48 @@
 import "package:flutter/material.dart";
-import "dart:async";
 
-StreamController<int> streamController = StreamController<int>();
-
-class Task extends StatefulWidget {
-  int _id = 0;
-
-  Task(this._id);
-
-  void setId(int id) => this._id = id;
-
-  int getId() => this._id;
-
-  @override
-  State<StatefulWidget> createState() {
-    return _TaskState();
-  }
+class Task {
+  String title = "";
+  bool done = false;
 }
 
-class _TaskState extends State<Task> {
-  bool _checked = false;
-  TextEditingController _controller = TextEditingController(text: "");
+class TaskWidget extends StatelessWidget {
+  const TaskWidget({
+    Key? key,
+    required this.onTitleChanged,
+    required this.onDeleteTapped,
+    required this.onCheckTapped,
+    required this.task,
+  }) : super(key: key);
+
+  final ValueChanged<String>? onTitleChanged;
+  final VoidCallback? onDeleteTapped;
+  final ValueChanged<bool?>? onCheckTapped;
+  final Task task;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      style: TextStyle(
-        color: _checked ? Colors.grey : Colors.black,
-        fontWeight: FontWeight.normal,
-        fontSize: 20,
+    return ListTile(
+      title: TextField(
+        style: TextStyle(
+          color: task.done ? Colors.grey : Colors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 20,
+        ),
+        controller: TextEditingController(text: task.title),
+        onChanged: onTitleChanged,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "I have to...",
+        ),
       ),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: "I have to...",
-        prefixIcon: IconButton(
-          icon: Icon(
-            _checked ? Icons.check_box : Icons.check_box_outline_blank,
-          ),
-          onPressed: () {
-            setState(() => _checked = !_checked);
-          },
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.delete_outline_rounded),
-          onPressed: () {
-            setState(() {
-              //TODO: implement the deletion algorithm
-              print(widget._id);
-              streamController.add(widget._id);
-            });
-          },
-        ),
+      trailing: IconButton(
+        icon: Icon(Icons.delete_outline_rounded),
+        onPressed: onDeleteTapped,
+      ),
+      leading: Checkbox(
+        value: task.done,
+        onChanged: onCheckTapped,
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 }
