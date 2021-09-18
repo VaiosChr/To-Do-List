@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//the to-do list widget class
 class ToDoListView extends StatefulWidget {
   ToDoListView({Key? key}) : super(key: key);
 
@@ -22,12 +23,14 @@ class ToDoListView extends StatefulWidget {
   _ToDoListViewState createState() => _ToDoListViewState();
 }
 
+//the to-do list widget state class
 class _ToDoListViewState extends State<ToDoListView> {
+  //a list of tasks, which makes up the to-do list
   late List<Task> tasks;
 
   @override
   void initState() {
-    tasks = [Task()];
+    tasks = [Task("")];
     super.initState();
   }
 
@@ -42,12 +45,19 @@ class _ToDoListViewState extends State<ToDoListView> {
         itemBuilder: (context, i) {
           return TaskWidget(
             task: tasks[i],
-            onDeleteTapped: () => setState(() => tasks.remove(tasks[i])),
-            onTitleChanged: (String value) =>
-                setState(() => tasks[i].title = value),
+            onDeleteTapped: () {
+              setState(() {
+                tasks.remove(tasks[i]);
+              });
+            },
+            onTitleChanged: (String value) {
+              setState(() {
+                tasks[i].title = value;
+              });
+            },
             onCheckTapped: (bool? value) {
               setState(() {
-                tasks[i].done = !tasks[i].done;
+                tasks[i].done = value!;
               });
             },
           );
@@ -59,7 +69,7 @@ class _ToDoListViewState extends State<ToDoListView> {
         ),
         child: Icon(Icons.add),
         onPressed: () {
-          setState(() => tasks.add(Task()));
+          setState(() => tasks.add(Task("")));
         },
       ),
     );

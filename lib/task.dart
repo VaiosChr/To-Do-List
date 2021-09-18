@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 
 class Task {
-  String title = "";
-  bool done = false;
+  String title;
+  bool done;
+
+  Task(this.title, {this.done: false});
 }
 
-class TaskWidget extends StatelessWidget {
+class TaskWidget extends StatefulWidget {
   const TaskWidget({
     Key? key,
     required this.onTitleChanged,
@@ -20,16 +22,35 @@ class TaskWidget extends StatelessWidget {
   final Task task;
 
   @override
+  _TaskWidgetState createState() => _TaskWidgetState();
+}
+
+class _TaskWidgetState extends State<TaskWidget> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController(text: widget.task.title);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListTile(
       title: TextField(
         style: TextStyle(
-          color: task.done ? Colors.grey : Colors.black,
+          color: widget.task.done ? Colors.grey : Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 20,
         ),
-        controller: TextEditingController(text: task.title),
-        onChanged: onTitleChanged,
+        controller: _textEditingController,
+        onChanged: widget.onTitleChanged,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: "I have to...",
@@ -37,11 +58,11 @@ class TaskWidget extends StatelessWidget {
       ),
       trailing: IconButton(
         icon: Icon(Icons.delete_outline_rounded),
-        onPressed: onDeleteTapped,
+        onPressed: widget.onDeleteTapped,
       ),
       leading: Checkbox(
-        value: task.done,
-        onChanged: onCheckTapped,
+        value: widget.task.done,
+        onChanged: widget.onCheckTapped,
       ),
     );
   }
