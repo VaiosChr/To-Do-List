@@ -49,12 +49,7 @@ class _ToDoListViewState extends State<ToDoListView> {
               setState(() {
                 tasks.remove(tasks[i]);
               });
-            },
-            onTitleChanged: (String value) {
-              setState(() {
-                tasks[i].title = value;
-              });
-            },
+            }, 
             onCheckTapped: (bool? value) {
               setState(() {
                 tasks[i].done = value!;
