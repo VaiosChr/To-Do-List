@@ -1,44 +1,47 @@
 import "package:flutter/material.dart";
 
 class Task {
-  String title;
-  bool done;
+  String title = "";
+  bool done = false;
 
-  Task(this.title, {this.done: false});
+  Task({this.title = "", this.done = false});
+
+  Map toMap() {
+    return {
+     "title": this.title,
+      "done": this.done,
+    };
+  }
 }
 
 class TaskWidget extends StatelessWidget {
   const TaskWidget({
     Key? key,
-    required this.onTitleChanged,
     required this.onDeleteTapped,
     required this.onCheckTapped,
     required this.task,
   });
 
-  final ValueChanged<String>? onTitleChanged;
   final VoidCallback? onDeleteTapped;
   final ValueChanged<bool?>? onCheckTapped;
   final Task task;
 
-   @override 
-   Widget build(BuildContext context) {
-     TextEditingController _textEditingController = TextEditingController(text: task.title);
-     return ListTile(
-      title: TextField(
-        style: TextStyle(
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController _textEditingController = TextEditingController(text: task.title);
+    return ListTile(
+      title: TextFormField(
+        style: TextStyle( 
           color: task.done ? Colors.grey : Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 20,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "I have to...",
         ),
         onChanged: (text) {
           task.title = text;
         },
         controller: _textEditingController,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "I have to...",
-        ),
       ),
       trailing: IconButton(
         icon: Icon(Icons.delete_outline_rounded),
@@ -49,5 +52,5 @@ class TaskWidget extends StatelessWidget {
         onChanged: onCheckTapped,
       ),
     );
-   }
+  }
 }

@@ -1,8 +1,16 @@
+import 'dart:convert';
 import "package:flutter/material.dart";
+import 'package:fluttertoast/fluttertoast.dart';
 
+import "./preferences.dart";
 import "./task.dart";
 
-void main() => runApp(MyApp());
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Preferences.init();
+
+  runApp(MyApp());
+}
 
 //the main class of the app
 class MyApp extends StatelessWidget {
@@ -30,7 +38,7 @@ class _ToDoListViewState extends State<ToDoListView> {
 
   @override
   void initState() {
-    tasks = [Task("")];
+    tasks = [Task()];
     super.initState();
   }
 
@@ -38,7 +46,20 @@ class _ToDoListViewState extends State<ToDoListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("To-Do List"),
+        title: Row(
+          children: [
+            Text("To-Do List"),
+            Spacer(),
+            IconButton(
+              icon: Icon(Icons.done),
+              onPressed: () async {
+                Fluttertoast.showToast(
+                  msg: 'Saved!',
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: ListView.builder(
         itemCount: tasks.length,
@@ -48,12 +69,10 @@ class _ToDoListViewState extends State<ToDoListView> {
             onDeleteTapped: () {
               setState(() {
                 tasks.remove(tasks[i]);
+                // jsonStrings.remove(i);
               });
-            }, 
-            onTitleChanged: (String value) {
-
             },
-            onCheckTapped: (bool? value) {
+            onCheckTapped: (value) {
               setState(() {
                 tasks[i].done = value!;
               });
@@ -67,7 +86,7 @@ class _ToDoListViewState extends State<ToDoListView> {
         ),
         child: Icon(Icons.add),
         onPressed: () {
-          setState(() => tasks.add(Task("")));
+          setState(() => tasks.add(Task()));
         },
       ),
     );
