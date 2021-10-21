@@ -2,15 +2,9 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 
-import "./preferences.dart";
 import "./task.dart";
 
-void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Preferences.init();
-
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 //the main class of the app
 class MyApp extends StatelessWidget {
@@ -52,10 +46,15 @@ class _ToDoListViewState extends State<ToDoListView> {
             Spacer(),
             IconButton(
               icon: Icon(Icons.done),
-              onPressed: () async {
+              onPressed: () {
                 Fluttertoast.showToast(
-                  msg: 'Saved!',
+                  msg: 'Saved',
                 );
+                String jsonTasks = jsonEncode(tasks);
+                print(jsonTasks);
+
+                // late List<Task> newTasks = jsonDecode(jsonTasks);
+                // tasks = newTasks;
               },
             ),
           ],
@@ -69,7 +68,6 @@ class _ToDoListViewState extends State<ToDoListView> {
             onDeleteTapped: () {
               setState(() {
                 tasks.remove(tasks[i]);
-                // jsonStrings.remove(i);
               });
             },
             onCheckTapped: (value) {

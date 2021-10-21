@@ -6,7 +6,7 @@ class Task {
 
   Task({this.title = "", this.done = false});
 
-  Map toMap() {
+  Map toJson() {
     return {
      "title": this.title,
       "done": this.done,
