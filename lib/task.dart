@@ -12,6 +12,15 @@ class Task {
       "done": this.done,
     };
   }
+
+  factory Task.fromJson(dynamic json) {
+    return Task(title: json["title"] as String, done: json["done"] as bool);
+  }
+
+  @override
+  String toString() {
+    return '{ ${this.title}, ${this.done} }';
+  }
 }
 
 class TaskWidget extends StatelessWidget {
