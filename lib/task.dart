@@ -38,6 +38,7 @@ class TaskWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController _textEditingController = TextEditingController(text: task.title);
+    
     return ListTile(
       title: TextFormField(
         style: TextStyle( 
