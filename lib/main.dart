@@ -36,11 +36,11 @@ class _ToDoListViewState extends State<ToDoListView> {
   //a list of tasks, which makes up the to-do list
   late List<Task> tasks;
 
-  @override
+  @override 
   void initState() {
-    tasks = [Task()];
-    
-    if(jsonDecode(Preferences.getTasksList()) != null) {
+    if(Preferences.getTasksList() == "") {
+      tasks = [Task()];
+    } else {
       var tasksJson = jsonDecode(Preferences.getTasksList()) as List;
       tasks = tasksJson.map((tasks) => Task.fromJson(tasks)).toList();
     }

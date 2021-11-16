@@ -13,5 +13,6 @@ class Preferences {
   static Future setTasksList(String tasks) async =>
       await _preferences.setString(tasksKey, tasks);
 
-      static String getTasksList() => _preferences.getString(tasksKey);
+  static String getTasksList() =>
+      _preferences.getString(tasksKey) ?? "";
 }
