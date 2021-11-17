@@ -13,38 +13,50 @@ class ToDoListView extends StatefulWidget {
 }
 
 class _ToDoListViewState extends State<ToDoListView> {
+  String name = "";
   late List<Task> tasks;
 
-  @override 
+  @override
   void initState() {
-    if(Preferences.getTasksList() == "") {
+    //initialize the tasks from the encoded json list
+    if (Preferences.getTasksList() == "") {
       tasks = [Task()];
     } else {
       var tasksJson = jsonDecode(Preferences.getTasksList()) as List;
       tasks = tasksJson.map((tasks) => Task.fromJson(tasks)).toList();
     }
 
+    //delete all the empty tasks
+    for(int i = 0; i < tasks.length; i++) {
+      if(!tasks[i].done && tasks[i].title == "") tasks.remove(tasks[i]);
+    }
+
+    //initialize the name of the to-do list
+    name = Preferences.getListName();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _textEditingController = TextEditingController(text: name);
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Text("To-Do List"),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.done),
-              onPressed: () async {
-                Fluttertoast.showToast(
-                  msg: 'Saved',
-                );
-                await Preferences.setTasksList(jsonEncode(tasks));
-              },
-            ),
-          ],
+        title: TextField(
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "To-Do List Name",
+          ),
+          onChanged: (text) async {
+            name = text;
+            await Preferences.setListName(name);
+          },
+          controller: _textEditingController,
         ),
       ),
       body: ListView.builder(
@@ -62,6 +74,9 @@ class _ToDoListViewState extends State<ToDoListView> {
                 tasks[i].done = value!;
               });
             },
+            onTitleChanged: () async {
+              await Preferences.setTasksList(jsonEncode(tasks));
+            }
           );
         },
       ),

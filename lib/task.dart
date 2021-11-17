@@ -28,11 +28,13 @@ class TaskWidget extends StatelessWidget {
     Key? key,
     required this.onDeleteTapped,
     required this.onCheckTapped,
+    required this.onTitleChanged,
     required this.task,
   });
 
   final VoidCallback? onDeleteTapped;
   final ValueChanged<bool?>? onCheckTapped;
+  final Function onTitleChanged;
   final Task task;
 
   @override
@@ -50,6 +52,7 @@ class TaskWidget extends StatelessWidget {
         ),
         onChanged: (text) {
           task.title = text;
+          onTitleChanged();
         },
         controller: _textEditingController,
       ),
