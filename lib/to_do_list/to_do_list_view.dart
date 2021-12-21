@@ -1,19 +1,21 @@
 import "package:flutter/material.dart";
 import "dart:convert";
-import 'package:fluttertoast/fluttertoast.dart';
 
-import "./task.dart";
-import "./preferences.dart";
+import 'task.dart';
+import '../preferences.dart';
 
 class ToDoListView extends StatefulWidget {
-  ToDoListView({Key? key}) : super(key: key);
+  ToDoListView({Key? key, name = ""}) : super(key: key);
 
   @override
   _ToDoListViewState createState() => _ToDoListViewState();
+
+  String name = "";
+
+  String getName() => name;
 }
 
 class _ToDoListViewState extends State<ToDoListView> {
-  String name = "";
   late List<Task> tasks;
 
   @override
@@ -27,19 +29,20 @@ class _ToDoListViewState extends State<ToDoListView> {
     }
 
     //delete all the empty tasks
-    for(int i = 0; i < tasks.length; i++) {
-      if(!tasks[i].done && tasks[i].title == "") tasks.remove(tasks[i]);
+    for (int i = 0; i < tasks.length; i++) {
+      if (!tasks[i].done && tasks[i].title == "") tasks.remove(tasks[i]);
     }
 
     //initialize the name of the to-do list
-    name = Preferences.getListName();
+    widget.name = Preferences.getListName();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textEditingController = TextEditingController(text: name);
+    TextEditingController _textEditingController =
+        TextEditingController(text: widget.name);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,14 +50,15 @@ class _ToDoListViewState extends State<ToDoListView> {
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: "To-Do List Name",
           ),
           onChanged: (text) async {
-            name = text;
-            await Preferences.setListName(name);
+            widget.name = text;
+            await Preferences.setListName(widget.name);
           },
           controller: _textEditingController,
         ),
@@ -76,7 +80,7 @@ class _ToDoListViewState extends State<ToDoListView> {
             },
             onTitleChanged: () async {
               await Preferences.setTasksList(jsonEncode(tasks));
-            }
+            },
           );
         },
       ),

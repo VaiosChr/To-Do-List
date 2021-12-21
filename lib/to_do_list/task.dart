@@ -8,7 +8,7 @@ class Task {
 
   Map toJson() {
     return {
-     "title": this.title,
+      "title": this.title,
       "done": this.done,
     };
   }
@@ -39,11 +39,12 @@ class TaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textEditingController = TextEditingController(text: task.title);
-    
+    TextEditingController _textEditingController =
+        TextEditingController(text: task.title);
+
     return ListTile(
       title: TextFormField(
-        style: TextStyle( 
+        style: TextStyle(
           color: task.done ? Colors.grey : Colors.black,
         ),
         decoration: InputDecoration(
