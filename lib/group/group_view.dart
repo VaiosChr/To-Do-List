@@ -37,11 +37,11 @@ class _GroupViewState extends State<GroupView> {
             child: Stack(
               children: [
                 Positioned(
-                  top: 10,
-                  left: 10,
+                  top: 12,
+                  left: 12,
                   child: Text(
                     //check if the name is too big and add [...] after it
-                    name.length > 30 ? name.substring(0, 30) + "..." : name,
+                    name.length > 25 ? name.substring(0, 25) + "..." : name,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,

@@ -5,12 +5,12 @@ import 'task.dart';
 import '../preferences.dart';
 
 class ToDoListView extends StatefulWidget {
-  ToDoListView({Key? key, name = ""}) : super(key: key);
+  String name = "";
+
+  ToDoListView({Key? key, this.name = ""}) : super(key: key);
 
   @override
   _ToDoListViewState createState() => _ToDoListViewState();
-
-  String name = "";
 
   String getName() => name;
 }
