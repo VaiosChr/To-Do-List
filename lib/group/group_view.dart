@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 
-import 'package:to_do_list/to_do_list/to_do_list_view.dart';
+import 'package:to_do_list/to_do_list/task.dart';
+import 'package:to_do_list/to_do_list/to_do_list_widget.dart';
 
 class GroupView extends StatefulWidget {
-  final List<ToDoListView> toDoListGroup;
+  final List<ToDoList> toDoListGroup;
+
   const GroupView({
     Key? key,
     required this.toDoListGroup,
@@ -15,6 +17,11 @@ class GroupView extends StatefulWidget {
 
 class _GroupViewState extends State<GroupView> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -23,13 +30,14 @@ class _GroupViewState extends State<GroupView> {
       body: ListView.builder(
         itemCount: widget.toDoListGroup.length,
         itemBuilder: (context, i) {
-          String name = widget.toDoListGroup[i].getName();
+          TextEditingController _textEditingController =
+              TextEditingController(text: widget.toDoListGroup[i].name);
 
           return Container(
             margin: EdgeInsets.all(10),
             alignment: Alignment.center,
             width: double.maxFinite,
-            height: 100,
+            height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.grey[300],
@@ -37,16 +45,23 @@ class _GroupViewState extends State<GroupView> {
             child: Stack(
               children: [
                 Positioned(
-                  top: 12,
+                  top: 0,
                   left: 12,
-                  child: Text(
+                  width: 300,
+                  child: TextFormField(
                     //check if the name is too big and add [...] after it
-                    name.length > 25 ? name.substring(0, 25) + "..." : name,
+                    // name.length > 25 ? name.substring(0, 25) + "..." : name,
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "To-do list name..."),
+                    onChanged: (text) {
+                      widget.toDoListGroup[i].name = text;
+                    },
+                    controller: _textEditingController,
                   ),
                 ),
                 Positioned(
@@ -60,19 +75,39 @@ class _GroupViewState extends State<GroupView> {
                     },
                   ),
                 ),
+                Positioned(
+                  bottom: 15,
+                  left: 12,
+                  child: Text(
+                    "total tasks: " +
+                        widget.toDoListGroup[i].tasks.length.toString(),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Icon(Icons.add),
-          onPressed: () {
-            setState(() => widget.toDoListGroup.add(ToDoListView()));
-          }),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon(Icons.add),
+        onPressed: () {
+          setState(
+            () => widget.toDoListGroup.add(
+              ToDoList(
+                tasks: [Task()],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

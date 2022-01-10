@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 
+import 'package:to_do_list/to_do_list/task.dart';
 import "./preferences.dart";
 import 'group/group_view.dart';
-import 'to_do_list/to_do_list_view.dart';
+import 'to_do_list/to_do_list_widget.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,11 +20,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      // home: ToDoListView(),
+      // home: ToDoListWidget(
+      //   toDoList: ToDoList()
+      // ),
       home: GroupView(
         toDoListGroup: [
-          ToDoListView(
+          ToDoList(
             name: "Check",
+            tasks: [Task()],
           ),
         ],
       ),
