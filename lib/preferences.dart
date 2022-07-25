@@ -6,6 +6,7 @@ class Preferences {
       SharedPreferences.getInstance() as SharedPreferences;
   static const tasksKey = "tasks";
   static const listNameKey = "listName";
+  static const groupKey = "group";
 
   static Future init() async {
     _preferences = await SharedPreferences.getInstance();
@@ -25,5 +26,13 @@ class Preferences {
 
   static String getListName() {
     return _preferences.getString(listNameKey) ?? "";
+  }
+
+  static Future setGroupList(String group) async {
+    await _preferences.setString(groupKey, group);
+  }
+
+  static String getGroupList() {
+    return _preferences.getString(groupKey) ?? "";
   }
 }

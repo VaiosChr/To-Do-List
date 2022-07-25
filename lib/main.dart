@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "To-Do List",
       theme: ThemeData(
         primarySwatch: Colors.teal,
@@ -23,8 +24,19 @@ class MyApp extends StatelessWidget {
       // home: ToDoListWidget(
       //   toDoList: ToDoList()
       // ),
+      initialRoute: "/group",
+      routes: {
+        "/list": (context) => ToDoListWidget(
+              toDoList: ToDoList(
+                tasks: [],
+              ),
+            ),
+        "/group": (context) => GroupView(
+              group: [],
+            ),
+      },
       home: GroupView(
-        toDoListGroup: [
+        group: [
           ToDoList(
             name: "Check",
             tasks: [Task()],

@@ -13,6 +13,29 @@ class ToDoList {
     this.name = "",
     required this.tasks,
   });
+
+  Map toJson() {
+    return {
+      "name": this.name,
+      "tasks": this.tasks,
+    };
+  }
+
+  factory ToDoList.fromJson(Map<String, dynamic> json) {
+    var list = json["tasks"] as List;
+    List<Task> tasksList = list.map((i) => Task.fromJson(i)).toList();
+
+    // return ToDoList(name: json["name"] as String, tasks: json["tasks"] as List<Task>);
+    return ToDoList(
+      name: json["name"] as String,
+      tasks: tasksList,
+    );
+  }
+
+  @override 
+  String toString() {
+    return "{${this.name}, ${this.tasks}}";
+  }
 }
 
 class ToDoListWidget extends StatefulWidget {

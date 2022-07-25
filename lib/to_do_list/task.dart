@@ -19,7 +19,7 @@ class Task {
 
   @override
   String toString() {
-    return '{ ${this.title}, ${this.done} }';
+    return '{${this.title}, ${this.done}}';
   }
 }
 
