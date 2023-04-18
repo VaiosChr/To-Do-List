@@ -8,8 +8,8 @@ class Task {
 
   Map toJson() {
     return {
-      "title": this.title,
-      "done": this.done,
+      "title": title,
+      "done": done,
     };
   }
 
@@ -19,13 +19,13 @@ class Task {
 
   @override
   String toString() {
-    return '{${this.title}, ${this.done}}';
+    return '{$title, $done}';
   }
 }
 
 class TaskWidget extends StatelessWidget {
   const TaskWidget({
-    Key? key,
+    super.key,
     required this.onDeleteTapped,
     required this.onCheckTapped,
     required this.onTitleChanged,
@@ -39,7 +39,7 @@ class TaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textEditingController =
+    TextEditingController textEditingController =
         TextEditingController(text: task.title);
 
     return ListTile(
@@ -47,7 +47,7 @@ class TaskWidget extends StatelessWidget {
         style: TextStyle(
           color: task.done ? Colors.grey : Colors.black,
         ),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           border: InputBorder.none,
           hintText: "I have to...",
         ),
@@ -55,10 +55,10 @@ class TaskWidget extends StatelessWidget {
           task.title = text;
           onTitleChanged();
         },
-        controller: _textEditingController,
+        controller: textEditingController,
       ),
       trailing: IconButton(
-        icon: Icon(Icons.delete_outline_rounded),
+        icon: const Icon(Icons.delete_outline_rounded),
         onPressed: onDeleteTapped,
       ),
       leading: Checkbox(

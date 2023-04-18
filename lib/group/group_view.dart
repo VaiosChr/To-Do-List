@@ -24,7 +24,7 @@ class _GroupViewState extends State<GroupView> {
   @override
   void initState() {
     //todo: initialize the group variable from the json list
-    if (Preferences.getGroupList() == "" || widget.group.length == 0) {
+    if (Preferences.getGroupList() == "" || widget.group.isEmpty) {
       widget.group = [ToDoList(tasks: [Task()])];
     } else {
       //todo: this throws an error 
@@ -39,17 +39,17 @@ class _GroupViewState extends State<GroupView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Group"),
+        title: const Text("Group"),
       ),
       body: ListView.builder(
         itemCount: widget.group.length,
         itemBuilder: (context, i) {
-          TextEditingController _textEditingController =
+          TextEditingController textEditingController =
               TextEditingController(text: widget.group[i].name);
 
           return GestureDetector(
             child: Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               alignment: Alignment.center,
               width: double.maxFinite,
               height: 80,
@@ -64,11 +64,12 @@ class _GroupViewState extends State<GroupView> {
                     left: 12,
                     width: 300,
                     child: Text(
+                      ///TODO: fix the character overflow in name
                       // ignore: unnecessary_null_comparison
-                      _textEditingController.text == null ? (_textEditingController.text.length > 25
-                          ? _textEditingController.text.substring(0, 25) + "..."
-                          : _textEditingController.text) : "New list",
-                      style: TextStyle(
+                      textEditingController.text == null ? (textEditingController.text.length > 25
+                          ? "${textEditingController.text.substring(0, 25)}..."
+                          : textEditingController.text) : "New list",
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -78,7 +79,7 @@ class _GroupViewState extends State<GroupView> {
                     right: 10,
                     top: 17,
                     child: IconButton(
-                      icon: Icon(Icons.delete_outline_rounded),
+                      icon: const Icon(Icons.delete_outline_rounded),
                       onPressed: () {
                         setState(() {
                           widget.group.remove(widget.group[i]);
@@ -90,8 +91,7 @@ class _GroupViewState extends State<GroupView> {
                     bottom: 15,
                     left: 12,
                     child: Text(
-                      "total tasks: " +
-                          widget.group[i].tasks.length.toString(),
+                      "total tasks: ${widget.group[i].tasks.length}",
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 15,
@@ -110,7 +110,7 @@ class _GroupViewState extends State<GroupView> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () async {
           setState(
             () => widget.group.add(
