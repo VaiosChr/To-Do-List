@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import "package:flutter/material.dart";
 
-import 'package:to_do_list/to_do_list/task.dart';
-import 'package:to_do_list/to_do_list/to_do_list_widget.dart';
+import 'package:to_do_list/widgets/to_do_list/task.dart';
+import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
-import '../preferences.dart';
+import '../../preferences.dart';
 
 // ignore: must_be_immutable
 class GroupView extends StatefulWidget {
@@ -39,7 +39,7 @@ class _GroupViewState extends State<GroupView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Group"),
+        title: const Text("My lists"),
       ),
       body: ListView.builder(
         itemCount: widget.group.length,

@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
+import 'package:to_do_list/pages/home_page.dart';
 
-import 'package:to_do_list/to_do_list/task.dart';
+import 'package:to_do_list/widgets/to_do_list/task.dart';
 import "./preferences.dart";
-import 'group/group_view.dart';
-import 'to_do_list/to_do_list_widget.dart';
+import 'widgets/group/group_view.dart';
+import 'widgets/to_do_list/to_do_list_widget.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,30 +22,34 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "To-Do List",
       theme: ThemeData(
-        primarySwatch: Colors.teal,
+        primaryColor: const Color.fromARGB(255, 194, 109, 233),
+        primarySwatch: Colors.indigo,
       ),
+      home: HomePage(),
       // home: ToDoListWidget(
-      //   toDoList: ToDoList()
+      //   toDoList: ToDoList(
+      //     tasks: [Task()],
+      //   ),
       // ),
-      initialRoute: "/group",
-      routes: {
-        "/list": (context) => ToDoListWidget(
-              toDoList: ToDoList(
-                tasks: [],
-              ),
-            ),
-        "/group": (context) => GroupView(
-              group: [],
-            ),
-      },
-      home: GroupView(
-        group: [
-          ToDoList(
-            name: "Check",
-            tasks: [Task()],
-          ),
-        ],
-      ),
+      // initialRoute: "/group",
+      // routes: {
+      //   "/list": (context) => ToDoListWidget(
+      //         toDoList: ToDoList(
+      //           tasks: [],
+      //         ),
+      //       ),
+      //   "/group": (context) => GroupView(
+      //         group: [],
+      //       ),
+      // },
+      // home: GroupView(
+      //   group: [
+      //     ToDoList(
+      //       name: "Check",
+      //       tasks: [Task()],
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
