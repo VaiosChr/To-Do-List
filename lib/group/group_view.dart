@@ -64,7 +64,8 @@ class _GroupViewState extends State<GroupView> {
                     left: 12,
                     width: 300,
                     child: Text(
-                      ///TODO: fix the character overflow in name
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       // ignore: unnecessary_null_comparison
                       textEditingController.text == null ? (textEditingController.text.length > 25
                           ? "${textEditingController.text.substring(0, 25)}..."
