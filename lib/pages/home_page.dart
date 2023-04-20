@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/widgets/todays_tasks.dart';
 
 import '../widgets/category.dart';
 import '../widgets/to_do_list/task.dart';
@@ -66,12 +67,21 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 30),
                     MultipleCategoryViewWidget(),
                     const SizedBox(height: 15),
+                    const TodaysTasksView(),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: primaryTextColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Icon(Icons.add),
+        onPressed: () {},
       ),
     );
   }

@@ -2,8 +2,7 @@ import "package:flutter/material.dart";
 import "dart:convert";
 
 import 'task.dart';
-
-import '../../preferences.dart';
+import 'package:to_do_list/preferences.dart';
 
 class ToDoList {
   String name;
@@ -148,7 +147,7 @@ class ToDoList {
 //   }
 // }
 
-class ToDoListWidget extends StatefulWidget {
+class ToDoListWidget extends StatelessWidget {
   const ToDoListWidget({
     Key? key,
     required this.toDoList,
@@ -157,61 +156,7 @@ class ToDoListWidget extends StatefulWidget {
   final ToDoList toDoList;
 
   @override
-  _ToDoListWidgetState createState() => _ToDoListWidgetState();
-}
-
-class _ToDoListWidgetState extends State<ToDoListWidget> {
-  @override
-  void initState() {
-    // initialize the name of the to-do list
-    widget.toDoList.name = Preferences.getListName();
-
-    // initialize the tasks from the encoded json list
-    if (Preferences.getTasksList() == "" || widget.toDoList.tasks.isEmpty) {
-      widget.toDoList.tasks = [Task()];
-    } else {
-      var tasksJson = jsonDecode(Preferences.getTasksList()) as List;
-      widget.toDoList.tasks =
-          tasksJson.map((tasks) => Task.fromJson(tasks)).toList();
-
-      // delete all the empty tasks
-      for (int i = 0; i < widget.toDoList.tasks.length; i++) {
-        if (!widget.toDoList.tasks[i].done &&
-            widget.toDoList.tasks[i].title == "") {
-          widget.toDoList.tasks.remove(widget.toDoList.tasks[i]);
-        }
-      }
-    }
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController =
-        TextEditingController(text: widget.toDoList.name);
-
-    return ListView.builder(
-      itemCount: widget.toDoList.tasks.length,
-      itemBuilder: (context, i) {
-        return TaskWidget(
-          task: widget.toDoList.tasks[i],
-          onDeleteTapped: () {
-            setState(() {
-              widget.toDoList.tasks.remove(widget.toDoList.tasks[i]);
-            });
-          },
-          onCheckTapped: (value) async {
-            setState(() {
-              widget.toDoList.tasks[i].done = value!;
-            });
-            await Preferences.setTasksList(jsonEncode(widget.toDoList.tasks));
-          },
-          onTitleChanged: () async {
-            await Preferences.setTasksList(jsonEncode(widget.toDoList.tasks));
-          },
-        );
-      },
-    );
+    return TaskWidget(task: Task(title: "Test", done: true));
   }
 }

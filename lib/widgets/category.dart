@@ -99,7 +99,6 @@ class MultipleCategoryViewWidget extends StatefulWidget {
         Task(done: true),
         Task(),
         Task(),
-        Task(),
       ],
     ),
     Category(

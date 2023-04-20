@@ -22,10 +22,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "To-Do List",
       theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 194, 109, 233),
+        primaryColor: const Color(0xFF004258),
         primarySwatch: Colors.indigo,
       ),
-      home: HomePage(),
+      home: const HomePage(),
       // home: ToDoListWidget(
       //   toDoList: ToDoList(
       //     tasks: [Task()],
