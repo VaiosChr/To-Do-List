@@ -75,14 +75,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryTextColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: const Icon(Icons.add),
-        onPressed: () {},
-      ),
     );
   }
 }

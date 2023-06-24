@@ -19,8 +19,10 @@ const Color color4 = Color(0xFF02172D);
 // extra colors
 const Color fancy1 = Color(0xFFD913BC);
 
-List<Color> fancyColors = [
-  const Color(0xFFD913BC),
-  const Color(0xFF96F200),
-  const Color(0xFF0038C7),
+List<Color> taskColors = [
+  const Color(0xff0b3954),
+  const Color(0xff087e8b),
+  const Color(0xffbfd7ea),
+  const Color(0xffff5a5f),
+  const Color(0xffc81d25),
 ];

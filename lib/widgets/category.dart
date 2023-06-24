@@ -2,15 +2,30 @@ import 'package:flutter/material.dart';
 
 import 'package:to_do_list/widgets/to_do_list/task.dart';
 import 'package:to_do_list/const/colors.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class Category {
   String name;
-  late List<Task> tasks;
+  //@TODO: remove the constant initialization, when finished with the logic
+  List<Task> tasks = [Task(), Task(), Task(done: true)];
+  Color color;
 
   Category({
     required this.name,
-    required this.tasks,
+    required this.color,
   });
+
+  void setName(String newName) => name = newName;
+
+  int getCompletedTasks() {
+    int completedTasks = 0;
+    for (var task in tasks) {
+      if (task.done) {
+        completedTasks++;
+      }
+    }
+    return completedTasks;
+  }
 }
 
 class CategoryViewWidget extends StatelessWidget {
@@ -65,10 +80,12 @@ class CategoryViewWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
-                value: category.tasks.length > 0 ? completedTasks() / category.tasks.length : 0,
+                value: category.tasks.isNotEmpty
+                    ? category.getCompletedTasks() / category.tasks.length
+                    : 0,
                 backgroundColor: lightTextColor,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  fancyColors[0],
+                  category.color,
                 ),
               ),
             ),
@@ -77,15 +94,77 @@ class CategoryViewWidget extends StatelessWidget {
       ),
     );
   }
+}
 
-  int completedTasks() {
-    int completedTasks = 0;
-    for (var task in category.tasks) {
-      if (task.done) {
-        completedTasks++;
-      }
-    }
-    return completedTasks;
+class ColorPickerItem extends StatelessWidget {
+  final Color color;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const ColorPickerItem({
+    super.key,
+    required this.color,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: selected
+            ? Icon(
+                Icons.check,
+                color: getIconColor(),
+              )
+            : null,
+      ),
+    );
+  }
+
+  Color getIconColor() {
+    double luminance =
+        (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
+}
+
+class ColorPickerRow extends StatefulWidget {
+  const ColorPickerRow({super.key});
+
+  @override
+  State<ColorPickerRow> createState() => _ColorPickerRowState();
+}
+
+class _ColorPickerRowState extends State<ColorPickerRow> {
+  int selectedIndex = 0;
+
+  void selectColor(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List.generate(
+        taskColors.length,
+        (index) => ColorPickerItem(
+          color: taskColors[index],
+          selected: index == selectedIndex,
+          onTap: () => selectColor(index),
+        ),
+      ),
+    );
   }
 }
 
@@ -95,20 +174,11 @@ class MultipleCategoryViewWidget extends StatefulWidget {
   List<Category> categories = [
     Category(
       name: "Work",
-      tasks: [
-        Task(done: true),
-        Task(),
-        Task(),
-      ],
+      color: taskColors[0],
     ),
     Category(
       name: "Personal",
-      tasks: [
-        Task(done: true),
-        Task(done: true),
-        Task(done: true),
-        Task(),
-      ],
+      color: taskColors[2],
     ),
   ];
 
@@ -124,14 +194,25 @@ class _MultipleCategoryViewWidgetState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "CATEGORIES",
-          style: TextStyle(
-            color: greyTextColor,
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "CATEGORIES",
+              style: TextStyle(
+                color: greyTextColor,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.add, color: greyTextColor),
+              onPressed: () {
+                showAddCategoryDialog(context);
+              },
+            ),
+          ],
         ),
         const SizedBox(height: 15),
         SingleChildScrollView(
@@ -147,6 +228,75 @@ class _MultipleCategoryViewWidgetState
           ),
         ),
       ],
+    );
+  }
+
+  void showAddCategoryDialog(BuildContext context) {
+    String categoryName = "";
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'Category name...',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: greyTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                onChanged: (value) {
+                  categoryName = value;
+                },
+              ),
+              const SizedBox(height: 15),
+              const ColorPickerRow(),
+            ],
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              child: const Text('Save'),
+              onPressed: () {
+                // Save the category name and color
+                Navigator.pop(context);
+              },
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        );
+      },
     );
   }
 }

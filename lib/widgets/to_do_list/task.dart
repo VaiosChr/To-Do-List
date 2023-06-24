@@ -4,6 +4,7 @@ import "package:to_do_list/const/colors.dart";
 class Task {
   String title = "";
   bool done = false;
+  Color color = taskColors[0];
 
   Task({this.title = "", this.done = false});
 
@@ -23,52 +24,6 @@ class Task {
     return '{$title, $done}';
   }
 }
-
-// class TaskWidget extends StatelessWidget {
-//   const TaskWidget({
-//     super.key,
-//     required this.onDeleteTapped,
-//     required this.onCheckTapped,
-//     required this.onTitleChanged,
-//     required this.task,
-//   });
-
-//   final VoidCallback? onDeleteTapped;
-//   final ValueChanged<bool?>? onCheckTapped;
-//   final Function onTitleChanged;
-//   final Task task;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     TextEditingController textEditingController =
-//         TextEditingController(text: task.title);
-
-//     return ListTile(
-//       title: TextFormField(
-//         style: TextStyle(
-//           color: task.done ? Colors.grey : Colors.black,
-//         ),
-//         decoration: const InputDecoration(
-//           border: InputBorder.none,
-//           hintText: "I have to...",
-//         ),
-//         onChanged: (text) {
-//           task.title = text;
-//           onTitleChanged();
-//         },
-//         controller: textEditingController,
-//       ),
-//       trailing: IconButton(
-//         icon: const Icon(Icons.delete_outline_rounded),
-//         onPressed: onDeleteTapped,
-//       ),
-//       leading: Checkbox(
-//         value: task.done,
-//         onChanged: onCheckTapped,
-//       ),
-//     );
-//   }
-// }
 
 class TaskWidget extends StatefulWidget {
   const TaskWidget({
@@ -112,9 +67,13 @@ class _TaskWidgetState extends State<TaskWidget> {
           height: 24.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.task.done ? fancy1 : Colors.transparent,
-            border:
-                widget.task.done ? null : Border.all(color: fancy1, width: 2.0),
+            color: widget.task.done ? widget.task.color : Colors.transparent,
+            border: widget.task.done
+                ? null
+                : Border.all(
+                    color: widget.task.color,
+                    width: 2.0,
+                  ),
           ),
           child: widget.task.done
               ? const Icon(
