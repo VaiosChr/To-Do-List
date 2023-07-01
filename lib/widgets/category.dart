@@ -137,7 +137,9 @@ class ColorPickerItem extends StatelessWidget {
 }
 
 class ColorPickerRow extends StatefulWidget {
-  const ColorPickerRow({super.key});
+  final ValueChanged<Color> onColorSelected;
+
+  const ColorPickerRow({required this.onColorSelected, super.key});
 
   @override
   State<ColorPickerRow> createState() => _ColorPickerRowState();
@@ -161,7 +163,11 @@ class _ColorPickerRowState extends State<ColorPickerRow> {
         (index) => ColorPickerItem(
           color: taskColors[index],
           selected: index == selectedIndex,
-          onTap: () => selectColor(index),
+          // onTap: () => selectColor(index),
+          onTap: () {
+            selectColor(index);
+            widget.onColorSelected(taskColors[index]);
+          },
         ),
       ),
     );
@@ -208,8 +214,115 @@ class _MultipleCategoryViewWidgetState
             ),
             IconButton(
               icon: const Icon(Icons.add, color: greyTextColor),
-              onPressed: () {
-                showAddCategoryDialog(context);
+              onPressed: () async {
+                Category newCategory = Category(
+                  name: "New Category",
+                  color: taskColors[0],
+                );
+                TextEditingController controller =
+                    TextEditingController(text: "New Category");
+
+                final selectedOption = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text(
+                        "Add New Category",
+                        style: TextStyle(
+                          color: primaryTextColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: controller,
+                            style: const TextStyle(
+                              color: secondaryTextColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Enter name",
+                              hintStyle: const TextStyle(
+                                color: greyTextColor,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey[200],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () => controller.clear(),
+                              ),
+                            ),
+                            onChanged: (value) => newCategory.name = value,
+                          ),
+                          const SizedBox(height: 15),
+                          ColorPickerRow(
+                            onColorSelected: (selectedColor) => newCategory.color = selectedColor,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: primaryTextColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(
+                              color: primaryTextColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          onPressed: () {
+                            // save the new category
+                            Navigator.pop(context, true);
+                          },
+                        ),
+                      ],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    );
+                  },
+                );
+
+                if (selectedOption) {
+                  setState(() => widget.categories.add(newCategory));
+                }
               },
             ),
           ],
@@ -228,75 +341,6 @@ class _MultipleCategoryViewWidgetState
           ),
         ),
       ],
-    );
-  }
-
-  void showAddCategoryDialog(BuildContext context) {
-    String categoryName = "";
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Category name...',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: greyTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-                onChanged: (value) {
-                  categoryName = value;
-                },
-              ),
-              const SizedBox(height: 15),
-              const ColorPickerRow(),
-            ],
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(
-                  color: primaryTextColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(
-                  color: primaryTextColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              child: const Text('Save'),
-              onPressed: () {
-                // Save the category name and color
-                Navigator.pop(context);
-              },
-            ),
-          ],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        );
-      },
     );
   }
 }
