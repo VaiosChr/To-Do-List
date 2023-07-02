@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:to_do_list/widgets/to_do_list/task.dart';
 import 'package:to_do_list/const/colors.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+
+import '../pages/category_page.dart';
 
 class Category {
   String name;
   //@TODO: remove the constant initialization, when finished with the logic
-  List<Task> tasks = [Task(), Task(), Task(done: true)];
+  List<Task> tasks = [];
   Color color;
 
   Category({
@@ -19,6 +20,7 @@ class Category {
 
   int getCompletedTasks() {
     int completedTasks = 0;
+
     for (var task in tasks) {
       if (task.done) {
         completedTasks++;
@@ -28,7 +30,7 @@ class Category {
   }
 }
 
-class CategoryViewWidget extends StatelessWidget {
+class CategoryViewWidget extends StatefulWidget {
   const CategoryViewWidget({
     super.key,
     required this.category,
@@ -37,60 +39,90 @@ class CategoryViewWidget extends StatelessWidget {
   final Category category;
 
   @override
+  State<CategoryViewWidget> createState() => _CategoryViewWidgetState();
+}
+
+class _CategoryViewWidgetState extends State<CategoryViewWidget> {
+  int completedTaskCount = 0;
+
+  @override 
+  void initState() {
+    super.initState();
+    completedTaskCount = widget.category.tasks.where((task) => task.done).length;
+  }
+
+  void markTaskAsDone(int index) {
+    setState(() {
+      widget.category.tasks[index].done = true;
+      completedTaskCount = widget.category.tasks.where((task) => task.done).length;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        width: 200,
-        height: 100,
-        decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.05),
-              spreadRadius: 10,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${category.tasks.length} tasks",
-              style: const TextStyle(
-                color: greyTextColor,
-                letterSpacing: 1.0,
-                fontWeight: FontWeight.w500,
+      child: GestureDetector(
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          width: 200,
+          height: 100,
+          decoration: BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.05),
+                spreadRadius: 10,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
               ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              category.name,
-              style: const TextStyle(
-                color: secondaryTextColor,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 25),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: category.tasks.isNotEmpty
-                    ? category.getCompletedTasks() / category.tasks.length
-                    : 0,
-                backgroundColor: lightTextColor,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  category.color,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${widget.category.tasks.length} tasks",
+                style: const TextStyle(
+                  color: greyTextColor,
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 5),
+              Text(
+                widget.category.name,
+                style: const TextStyle(
+                  color: secondaryTextColor,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 25),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: widget.category.tasks.isNotEmpty
+                      ? widget.category.getCompletedTasks() / widget.category.tasks.length
+                      : 0,
+                  backgroundColor: lightTextColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    widget.category.color,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CategoryPage(category: widget.category),
+            ),
+          );
+        },
       ),
     );
   }
@@ -239,7 +271,6 @@ class _MultipleCategoryViewWidgetState
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 10),
                           TextFormField(
                             controller: controller,
                             style: const TextStyle(
@@ -256,6 +287,8 @@ class _MultipleCategoryViewWidgetState
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1.5,
                               ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 15.0),
                               filled: true,
                               fillColor: Colors.grey[200],
                               border: OutlineInputBorder(
@@ -269,9 +302,10 @@ class _MultipleCategoryViewWidgetState
                             ),
                             onChanged: (value) => newCategory.name = value,
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
                           ColorPickerRow(
-                            onColorSelected: (selectedColor) => newCategory.color = selectedColor,
+                            onColorSelected: (selectedColor) =>
+                                newCategory.color = selectedColor,
                           ),
                         ],
                       ),

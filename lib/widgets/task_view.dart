@@ -29,7 +29,8 @@ class _TodaysTasksViewState extends State<TodaysTasksView> {
         const SizedBox(height: 15),
         ToDoListWidget(
           toDoList: ToDoList(
-            tasks: [Task()],
+            tasks: [Task(color: taskColors[0])],
+            color: taskColors[0],
           ),
         ),
       ],
