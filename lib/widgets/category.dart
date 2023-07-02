@@ -43,21 +43,6 @@ class CategoryViewWidget extends StatefulWidget {
 }
 
 class _CategoryViewWidgetState extends State<CategoryViewWidget> {
-  int completedTaskCount = 0;
-
-  @override 
-  void initState() {
-    super.initState();
-    completedTaskCount = widget.category.tasks.where((task) => task.done).length;
-  }
-
-  void markTaskAsDone(int index) {
-    setState(() {
-      widget.category.tasks[index].done = true;
-      completedTaskCount = widget.category.tasks.where((task) => task.done).length;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -104,7 +89,8 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
                   value: widget.category.tasks.isNotEmpty
-                      ? widget.category.getCompletedTasks() / widget.category.tasks.length
+                      ? widget.category.getCompletedTasks() /
+                          widget.category.tasks.length
                       : 0,
                   backgroundColor: lightTextColor,
                   valueColor: AlwaysStoppedAnimation<Color>(
@@ -354,7 +340,7 @@ class _MultipleCategoryViewWidgetState
                   },
                 );
 
-                if (selectedOption) {
+                if (selectedOption != null && selectedOption) {
                   setState(() => widget.categories.add(newCategory));
                 }
               },

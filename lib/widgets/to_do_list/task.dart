@@ -52,7 +52,7 @@ class _TaskWidgetState extends State<TaskWidget> {
         ),
         decoration: const InputDecoration(
           border: InputBorder.none,
-          hintText: "I have to...",
+          hintText: "Add a task",
           hintStyle: TextStyle(
             color: lightTextColor,
           ),
