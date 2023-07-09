@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+import '../../const/colors.dart';
 import 'task.dart';
 
 class ToDoList {
@@ -19,24 +20,9 @@ class ToDoList {
       "tasks": tasks,
     };
   }
-
-  // factory ToDoList.fromJson(Map<String, dynamic> json) {
-  //   var list = json["tasks"] as List;
-  //   List<Task> tasksList = list.map((i) => Task.fromJson(i)).toList();
-
-  //   return ToDoList(
-  //     name: json["name"] as String,
-  //     tasks: tasksList,
-  //   );
-  // }
-
-  // @override
-  // String toString() {
-  //   return "{$name, $tasks}";
-  // }
 }
 
-class ToDoListWidget extends StatelessWidget {
+class ToDoListWidget extends StatefulWidget {
   const ToDoListWidget({
     Key? key,
     required this.toDoList,
@@ -45,12 +31,34 @@ class ToDoListWidget extends StatelessWidget {
   final ToDoList toDoList;
 
   @override
+  State<ToDoListWidget> createState() => _ToDoListWidgetState();
+}
+
+class _ToDoListWidgetState extends State<ToDoListWidget> {
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: toDoList.tasks.length,
+      itemCount: widget.toDoList.tasks.length,
       itemBuilder: (context, index) {
-        return TaskWidget(task: toDoList.tasks[index]);
+        return SizedBox(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TaskWidget(task: widget.toDoList.tasks[index]),
+              IconButton(
+                icon: const Icon(Icons.delete_outline),
+                color: alertColor,
+                onPressed: () {
+                  setState(() {
+                    widget.toDoList.tasks.removeAt(index);
+                  });
+                },
+              ),
+            ],
+          ),
+        );
       },
     );
   }

@@ -45,12 +45,6 @@ class CategoryViewWidget extends StatefulWidget {
 class _CategoryViewWidgetState extends State<CategoryViewWidget> {
   int completedTaskCount = 0;
 
-  @override 
-  void initState() {
-    super.initState();
-    completedTaskCount = widget.category.tasks.where((task) => task.done).length;
-  }
-
   void markTaskAsDone(int index) {
     setState(() {
       widget.category.tasks[index].done = true;
@@ -66,7 +60,6 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
         child: Container(
           padding: const EdgeInsets.all(10),
           width: 200,
-          height: 100,
           decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.circular(8),
@@ -209,7 +202,7 @@ class _ColorPickerRowState extends State<ColorPickerRow> {
 class MultipleCategoryViewWidget extends StatefulWidget {
   MultipleCategoryViewWidget({super.key});
 
-  List<Category> categories = [
+  final List<Category> categories = [
     Category(
       name: "Work",
       color: taskColors[0],

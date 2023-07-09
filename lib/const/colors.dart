@@ -16,6 +16,8 @@ const Color color2 = Color(0xFF2D6C83);
 const Color color3 = Color(0xFF004258);
 const Color color4 = Color(0xFF02172D);
 
+Color alertColor = Colors.red[200]!;
+
 // extra colors
 const Color fancy1 = Color(0xFFD913BC);
 
