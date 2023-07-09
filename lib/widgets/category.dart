@@ -97,7 +97,8 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
                   value: widget.category.tasks.isNotEmpty
-                      ? widget.category.getCompletedTasks() / widget.category.tasks.length
+                      ? widget.category.getCompletedTasks() /
+                          widget.category.tasks.length
                       : 0,
                   backgroundColor: lightTextColor,
                   valueColor: AlwaysStoppedAnimation<Color>(
@@ -347,7 +348,7 @@ class _MultipleCategoryViewWidgetState
                   },
                 );
 
-                if (selectedOption) {
+                if (selectedOption != null && selectedOption) {
                   setState(() => widget.categories.add(newCategory));
                 }
               },
