@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
-import 'package:to_do_list/widgets/task_view.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
 import '../widgets/category.dart';
@@ -90,7 +89,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                       letterSpacing: 1.5,
                                     ),
                                     contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 15.0),
+                                      vertical: 10.0,
+                                      horizontal: 15.0,
+                                    ),
                                     filled: true,
                                     fillColor: Colors.grey[200],
                                     border: OutlineInputBorder(
@@ -102,8 +103,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                       onPressed: () => controller.clear(),
                                     ),
                                   ),
-                                  onChanged: (value) =>
-                                      newCategoryName = value,
+                                  onChanged: (value) => newCategoryName = value,
                                 ),
                                 const SizedBox(height: 20),
                                 ColorPickerRow(
@@ -113,48 +113,48 @@ class _CategoryPageState extends State<CategoryPage> {
                               ],
                             ),
                             actions: [
-                        TextButton(
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: primaryTextColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              letterSpacing: 1.5,
+                              TextButton(
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    color: primaryTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: primaryTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // save the new category
+                                  widget.category.name = newCategoryName;
+                                  widget.category.color = newCategoryColor;
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                          child: const Text(
-                            'Save',
-                            style: TextStyle(
-                              color: primaryTextColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                          onPressed: () {
-                            // save the new category
-                            widget.category.name = newCategoryName;
-                            widget.category.color = newCategoryColor;
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
                           );
                         },
                       );

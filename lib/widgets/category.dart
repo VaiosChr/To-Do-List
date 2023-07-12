@@ -48,7 +48,8 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
   void markTaskAsDone(int index) {
     setState(() {
       widget.category.tasks[index].done = true;
-      completedTaskCount = widget.category.tasks.where((task) => task.done).length;
+      completedTaskCount =
+          widget.category.tasks.where((task) => task.done).length;
     });
   }
 
@@ -96,10 +97,12 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
-                  value: widget.category.tasks.isNotEmpty
-                      ? widget.category.getCompletedTasks() /
-                          widget.category.tasks.length
-                      : 0,
+                  //@TODO: replace the constant initialization
+                  // value: widget.category.tasks.isNotEmpty
+                  //     ? widget.category.getCompletedTasks() /
+                  //         widget.category.tasks.length
+                  //     : 0,
+                  value: 0.62,
                   backgroundColor: lightTextColor,
                   valueColor: AlwaysStoppedAnimation<Color>(
                     widget.category.color,
@@ -282,7 +285,9 @@ class _MultipleCategoryViewWidgetState
                                 letterSpacing: 1.5,
                               ),
                               contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 15.0),
+                                vertical: 10.0,
+                                horizontal: 15.0,
+                              ),
                               filled: true,
                               fillColor: Colors.grey[200],
                               border: OutlineInputBorder(

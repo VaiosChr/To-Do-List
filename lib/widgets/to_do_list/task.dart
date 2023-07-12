@@ -7,22 +7,6 @@ class Task {
   Color color = taskColors[0];
 
   Task({this.title = "", this.done = false, required this.color});
-
-  // Map toJson() {
-  //   return {
-  //     "title": title,
-  //     "done": done,
-  //   };
-  // }
-
-  // factory Task.fromJson(dynamic json) {
-  //   return Task(title: json["title"] as String, done: json["done"] as bool);
-  // }
-
-  // @override
-  // String toString() {
-  //   return '{$title, $done}';
-  // }
 }
 
 class TaskWidget extends StatefulWidget {
@@ -40,7 +24,7 @@ class TaskWidget extends StatefulWidget {
 class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController =
+    TextEditingController controller =
         TextEditingController(text: widget.task.title);
 
     return Expanded(
@@ -53,12 +37,12 @@ class _TaskWidgetState extends State<TaskWidget> {
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
-            hintText: "I have to...",
+            hintText: "New task",
             hintStyle: TextStyle(
               color: lightTextColor,
             ),
           ),
-          controller: textEditingController,
+          controller: controller,
         ),
         leading: InkWell(
           onTap: () {

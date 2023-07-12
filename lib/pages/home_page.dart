@@ -3,7 +3,6 @@ import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/task_view.dart';
 
 import '../widgets/category.dart';
-import '../widgets/to_do_list/task.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
