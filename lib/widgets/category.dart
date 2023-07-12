@@ -167,8 +167,9 @@ class ColorPickerItem extends StatelessWidget {
 
 class ColorPickerRow extends StatefulWidget {
   final ValueChanged<Color> onColorSelected;
+  final Color initialColor;
 
-  const ColorPickerRow({required this.onColorSelected, super.key});
+  const ColorPickerRow({required this.onColorSelected, required this.initialColor, super.key});
 
   @override
   State<ColorPickerRow> createState() => _ColorPickerRowState();
@@ -176,6 +177,12 @@ class ColorPickerRow extends StatefulWidget {
 
 class _ColorPickerRowState extends State<ColorPickerRow> {
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = taskColors.indexOf(widget.initialColor);
+  }
 
   void selectColor(int index) {
     setState(() {
@@ -303,6 +310,7 @@ class _MultipleCategoryViewWidgetState
                           ),
                           const SizedBox(height: 20),
                           ColorPickerRow(
+                            initialColor: taskColors[0],
                             onColorSelected: (selectedColor) =>
                                 newCategory.color = selectedColor,
                           ),

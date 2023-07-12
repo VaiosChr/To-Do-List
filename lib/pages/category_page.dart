@@ -107,6 +107,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ),
                                 const SizedBox(height: 20),
                                 ColorPickerRow(
+                                  initialColor: widget.category.color,
                                   onColorSelected: (selectedColor) =>
                                       newCategoryColor = selectedColor,
                                 ),
@@ -148,6 +149,14 @@ class _CategoryPageState extends State<CategoryPage> {
                                   // save the new category
                                   widget.category.name = newCategoryName;
                                   widget.category.color = newCategoryColor;
+
+                                  // update the existing tasks' color
+                                  for (int i = 0; i < widget.category.tasks.length; i++) {
+                                    setState(() {
+                                      widget.category.tasks[i].color = newCategoryColor;
+                                    });
+                                  }
+
                                   Navigator.pop(context);
                                 },
                               ),
