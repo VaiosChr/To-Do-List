@@ -42,6 +42,7 @@ class _TaskWidgetState extends State<TaskWidget> {
               color: lightTextColor,
             ),
           ),
+          onChanged: (value) => widget.task.title = value,
           controller: controller,
         ),
         leading: InkWell(

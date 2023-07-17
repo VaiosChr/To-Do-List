@@ -7,7 +7,6 @@ import '../pages/category_page.dart';
 
 class Category {
   String name;
-  //@TODO: remove the constant initialization, when finished with the logic
   List<Task> tasks = [];
   Color color;
 
@@ -60,7 +59,7 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
       child: GestureDetector(
         child: Container(
           padding: const EdgeInsets.all(10),
-          width: 200,
+          width: 300,
           decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.circular(8),
@@ -92,8 +91,10 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(

@@ -66,7 +66,12 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 30),
                     MultipleCategoryViewWidget(),
                     const SizedBox(height: 15),
-                    const TodaysTasksView(),
+                    TodaysTasksView(
+                      category: Category(
+                        name: "Today's Tasks",
+                        color: taskColors[0],
+                      ),
+                    ),
                   ],
                 ),
               ),
