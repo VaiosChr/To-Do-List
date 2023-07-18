@@ -54,74 +54,71 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: GestureDetector(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          width: 300,
-          decoration: BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.05),
-                spreadRadius: 10,
-                blurRadius: 5,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${widget.category.tasks.length} tasks",
-                style: const TextStyle(
-                  color: greyTextColor,
-                  letterSpacing: 1.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                widget.category.name,
-                style: const TextStyle(
-                  color: secondaryTextColor,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 15),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: widget.category.tasks.isNotEmpty
-                      ? widget.category.getCompletedTasks() /
-                          widget.category.tasks.length
-                      : 0,
-                  backgroundColor: lightTextColor,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    widget.category.color,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CategoryPage(category: widget.category),
+    return GestureDetector(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        width: 300,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              spreadRadius: 10,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
             ),
-          ).then((value) {
-            setState(() {});
-          });
-        },
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "${widget.category.tasks.length} tasks",
+              style: const TextStyle(
+                color: greyTextColor,
+                letterSpacing: 1.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              widget.category.name,
+              style: const TextStyle(
+                color: secondaryTextColor,
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 15),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: LinearProgressIndicator(
+                value: widget.category.tasks.isNotEmpty
+                    ? widget.category.getCompletedTasks() /
+                        widget.category.tasks.length
+                    : 0,
+                backgroundColor: lightTextColor,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  widget.category.color,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryPage(category: widget.category),
+          ),
+        ).then((value) {
+          setState(() {});
+        });
+      },
     );
   }
 }
@@ -376,11 +373,14 @@ class _MultipleCategoryViewWidgetState
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              for (var category in widget.categories)
+              for (int i = 0; i < widget.categories.length - 1; i++)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: CategoryViewWidget(category: category),
+                  child: CategoryViewWidget(category: widget.categories[i]),
                 ),
+              CategoryViewWidget(
+                category: widget.categories[widget.categories.length - 1],
+              ),
             ],
           ),
         ),

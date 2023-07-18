@@ -37,29 +37,20 @@ class ToDoListWidget extends StatefulWidget {
 class _ToDoListWidgetState extends State<ToDoListWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.toDoList.tasks.length,
-      itemBuilder: (context, index) {
-        return SizedBox(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TaskWidget(task: widget.toDoList.tasks[index]),
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                color: alertColor,
-                onPressed: () {
-                  setState(() {
-                    widget.toDoList.tasks.removeAt(index);
-                  });
-                },
-              ),
-            ],
-          ),
-        );
-      },
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          for (int i = 0; i < widget.toDoList.tasks.length; i++) 
+            TaskWidget(
+              task: widget.toDoList.tasks[i],
+              onDeleteTapped: () {
+                setState(() {
+                  widget.toDoList.tasks.removeAt(i);
+                });
+              },
+            ),
+        ],
+      ),
     );
   }
 }

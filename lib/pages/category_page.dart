@@ -46,7 +46,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: const Icon(Icons.edit),
+                    icon: const Icon(Icons.edit_calendar_outlined),
                     color: primaryTextColor,
                     onPressed: () {
                       String newCategoryName = widget.category.name;
