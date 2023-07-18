@@ -98,12 +98,10 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
-                  //@TODO: replace the constant initialization
-                  // value: widget.category.tasks.isNotEmpty
-                  //     ? widget.category.getCompletedTasks() /
-                  //         widget.category.tasks.length
-                  //     : 0,
-                  value: 0.62,
+                  value: widget.category.tasks.isNotEmpty
+                      ? widget.category.getCompletedTasks() /
+                          widget.category.tasks.length
+                      : 0,
                   backgroundColor: lightTextColor,
                   valueColor: AlwaysStoppedAnimation<Color>(
                     widget.category.color,
@@ -119,7 +117,9 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
             MaterialPageRoute(
               builder: (context) => CategoryPage(category: widget.category),
             ),
-          );
+          ).then((value) {
+            setState(() {});
+          });
         },
       ),
     );
@@ -170,7 +170,8 @@ class ColorPickerRow extends StatefulWidget {
   final ValueChanged<Color> onColorSelected;
   final Color initialColor;
 
-  const ColorPickerRow({required this.onColorSelected, required this.initialColor, super.key});
+  const ColorPickerRow(
+      {required this.onColorSelected, required this.initialColor, super.key});
 
   @override
   State<ColorPickerRow> createState() => _ColorPickerRowState();
@@ -277,6 +278,7 @@ class _MultipleCategoryViewWidgetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextFormField(
+                            maxLength: 20,
                             controller: controller,
                             style: const TextStyle(
                               color: secondaryTextColor,
