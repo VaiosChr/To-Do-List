@@ -11,45 +11,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        bottom: true,
         top: true,
-        bottom: false,
         child: Container(
           padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // top row buttons
-                  IconButton(
-                    icon: const Icon(
-                      Icons.menu_open,
-                      color: color2,
-                    ),
-                    onPressed: () {},
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.search,
-                          color: color2,
-                        ),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.notifications_none,
-                          color: color2,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
               Container(
                 padding: const EdgeInsets.all(20),
                 child: Column(

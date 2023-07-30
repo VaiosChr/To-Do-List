@@ -104,6 +104,7 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
                 valueColor: AlwaysStoppedAnimation<Color>(
                   widget.category.color,
                 ),
+                minHeight: 6,
               ),
             ),
           ],
@@ -376,7 +377,9 @@ class _MultipleCategoryViewWidgetState
               for (int i = 0; i < widget.categories.length - 1; i++)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: CategoryViewWidget(category: widget.categories[i]),
+                  child: CategoryViewWidget(
+                    category: widget.categories[i],
+                  ),
                 ),
               CategoryViewWidget(
                 category: widget.categories[widget.categories.length - 1],
