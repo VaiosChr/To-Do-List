@@ -13,27 +13,24 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         bottom: true,
         top: true,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Text(
+                  "What's up, Vaios!",
+                  style: TextStyle(
+                    color: primaryTextColor,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                MultipleCategoryViewWidget(),
+                const SizedBox(height: 15),
+                Column(
                   children: [
-                    const Text(
-                      "What's up, Vaios!",
-                      style: TextStyle(
-                        color: primaryTextColor,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    MultipleCategoryViewWidget(),
-                    const SizedBox(height: 15),
                     TodaysTasksView(
                       category: Category(
                         name: "Today's Tasks",
@@ -42,8 +39,8 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
