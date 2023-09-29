@@ -28,3 +28,5 @@ List<Color> taskColors = [
   const Color(0xffff5a5f),
   const Color(0xffc81d25),
 ];
+
+const Color tileColor = Color.fromARGB(255, 231, 245, 250);

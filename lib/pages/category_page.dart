@@ -32,6 +32,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       color: primaryTextColor,
+                      size: 20,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -73,6 +74,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextFormField(
+                                  maxLength: 16,
                                   controller: controller,
                                   style: const TextStyle(
                                     color: secondaryTextColor,
@@ -151,9 +153,12 @@ class _CategoryPageState extends State<CategoryPage> {
                                   widget.category.color = newCategoryColor;
 
                                   // update the existing tasks' color
-                                  for (int i = 0; i < widget.category.tasks.length; i++) {
+                                  for (int i = 0;
+                                      i < widget.category.tasks.length;
+                                      i++) {
                                     setState(() {
-                                      widget.category.tasks[i].color = newCategoryColor;
+                                      widget.category.tasks[i].color =
+                                          newCategoryColor;
                                     });
                                   }
 

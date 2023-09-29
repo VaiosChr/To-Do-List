@@ -57,18 +57,10 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
     return GestureDetector(
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: 300,
+        width: 200,
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: tileColor,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.05),
-              spreadRadius: 10,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +84,7 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 5),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
@@ -100,7 +92,7 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
                     ? widget.category.getCompletedTasks() /
                         widget.category.tasks.length
                     : 0,
-                backgroundColor: lightTextColor,
+                backgroundColor: whiteColor,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   widget.category.color,
                 ),
@@ -276,7 +268,7 @@ class _MultipleCategoryViewWidgetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextFormField(
-                            maxLength: 20,
+                            maxLength: 16,
                             controller: controller,
                             style: const TextStyle(
                               color: secondaryTextColor,
