@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'category.dart';
 
 class MultipleCategoryViewWidget extends StatefulWidget {
-  MultipleCategoryViewWidget({super.key});
+  const MultipleCategoryViewWidget({super.key});
 
   @override
   State<MultipleCategoryViewWidget> createState() =>
@@ -18,24 +18,20 @@ class MultipleCategoryViewWidget extends StatefulWidget {
 class _MultipleCategoryViewWidgetState
     extends State<MultipleCategoryViewWidget> {
   List<Category> categories = [];
-  //   Category(
-  //     name: "Work",
-  //     color: taskColors[0],
-  //   ),
-  //   Category(
-  //     name: "Personal",
-  //     color: taskColors[2],
-  //   ),
-  // ];
 
   @override
   void initState() {
     super.initState();
-    loadCategories();
+    loadCategories().then((value) {
+      setState(() {
+        categories = value;
+      });
+    });
   }
 
   Future<List<Category>> loadCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.clear();
     List<String> categoryStrings = prefs.getStringList('categories') ?? [];
 
     List<Category> categories = categoryStrings.map((e) {
@@ -189,6 +185,7 @@ class _MultipleCategoryViewWidgetState
 
                 if (selectedOption != null && selectedOption) {
                   setState(() => categories.add(newCategory));
+                  saveCategories(categories);
                 }
               },
             ),

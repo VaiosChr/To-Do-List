@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
@@ -15,6 +18,38 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  // @override 
+  // void initState() {
+  //   super.initState();
+  //   loadTasks().then((tasks) {
+  //     setState(() {
+  //       widget.category.tasks = tasks;
+  //     });
+  //   });
+  // }
+
+  // Future<void> saveTasks(List<Task> tasks) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+  //   List<String> taskStrings = tasks.map((e) {
+  //     return json.encode(e.toJson());
+  //   }).toList();
+
+  //   await prefs.setStringList('tasks', taskStrings);
+  // }
+
+  // Future<List<Task>> loadTasks() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   List<String> taskStrings = prefs.getStringList('tasks') ?? [];
+
+  //   List<Task> tasks = taskStrings.map((e) {
+  //     Map<String, dynamic> taskMap = json.decode(e);
+  //     return Task.fromJson(taskMap);
+  //   }).toList();
+
+  //   return tasks;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +69,10 @@ class _CategoryPageState extends State<CategoryPage> {
                       color: primaryTextColor,
                       size: 20,
                     ),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      // saveTasks(widget.category.tasks);
+                      Navigator.pop(context);
+                    },
                   ),
                   Text(
                     widget.category.name,

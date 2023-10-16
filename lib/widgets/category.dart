@@ -29,12 +29,18 @@ class Category {
     }
     return completedTasks;
   }
+  
+  void tasksFromJson(Map<String, dynamic> json) {
+    tasks = (json["tasks"] as List<dynamic>)
+        .map((task) => Task.fromJson(task))
+        .toList();
+  }
 
   Map<String, dynamic> toJson() {
     return {
       "name": name,
       'color': color.value.toRadixString(16),
-      "tasks": tasks,
+      "tasks": tasks.map((task) => task.toJson()).toList(),
     };
   }
 
@@ -42,7 +48,9 @@ class Category {
     return Category(
       name: json["name"],
       color: Color(int.parse(json['color'], radix: 16)),
-      tasks: json["tasks"],
+      tasks: (json["tasks"] as List<dynamic>)
+          .map((task) => Task.fromJson(task))
+          .toList(),
     );
   }
 }

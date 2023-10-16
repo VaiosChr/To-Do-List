@@ -7,6 +7,20 @@ class Task {
   Color color = taskColors[0];
 
   Task({this.title = "", this.done = false, required this.color});
+  
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "done": done,
+        "color": color.value.toRadixString(16),
+      };
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      title: json["title"],
+      done: json["done"],
+      color: Color(int.parse(json['color'], radix: 16)),
+    );
+  }
 }
 
 class TaskWidget extends StatefulWidget {
