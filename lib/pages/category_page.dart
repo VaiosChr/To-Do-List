@@ -17,40 +17,7 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
-  // @override 
-  // void initState() {
-  //   super.initState();
-  //   loadTasks().then((tasks) {
-  //     setState(() {
-  //       widget.category.tasks = tasks;
-  //     });
-  //   });
-  // }
-
-  // Future<void> saveTasks(List<Task> tasks) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    
-  //   List<String> taskStrings = tasks.map((e) {
-  //     return json.encode(e.toJson());
-  //   }).toList();
-
-  //   await prefs.setStringList('tasks', taskStrings);
-  // }
-
-  // Future<List<Task>> loadTasks() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   List<String> taskStrings = prefs.getStringList('tasks') ?? [];
-
-  //   List<Task> tasks = taskStrings.map((e) {
-  //     Map<String, dynamic> taskMap = json.decode(e);
-  //     return Task.fromJson(taskMap);
-  //   }).toList();
-
-  //   return tasks;
-  // }
-
-  @override
+class _CategoryPageState extends State<CategoryPage> {@override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -70,7 +37,6 @@ class _CategoryPageState extends State<CategoryPage> {
                       size: 20,
                     ),
                     onPressed: () {
-                      // saveTasks(widget.category.tasks);
                       Navigator.pop(context);
                     },
                   ),

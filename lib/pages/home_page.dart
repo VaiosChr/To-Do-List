@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/task_view.dart';
 
-import '../widgets/category.dart';
+import '../widgets/to_do_list/to_do_list_widget.dart';
 import '../widgets/multiple_categories.dart';
 
 class HomePage extends StatelessWidget {
@@ -28,17 +28,14 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                MultipleCategoryViewWidget(),
+                const MultipleCategoryViewWidget(),
                 const SizedBox(height: 15),
-                Column(
-                  children: [
-                    TodaysTasksView(
-                      category: Category(
-                        name: "Today's Tasks",
-                        color: taskColors[0],
-                      ),
-                    ),
-                  ],
+                TodaysTasksView(
+                  toDoList: ToDoList(
+                    tasks: [],
+                    name: "Today's Tasks",
+                    color: taskColors[0],
+                  ),
                 ),
               ],
             ),

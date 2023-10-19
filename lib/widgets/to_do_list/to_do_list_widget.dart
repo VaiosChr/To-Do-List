@@ -1,8 +1,11 @@
+import 'dart:convert';
 import "package:flutter/material.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'task.dart';
 
 class ToDoList {
+  //@TODO: set a unique ID for every toDoList object, for the saving logic
   String name;
   late List<Task> tasks;
   Color color;
@@ -35,6 +38,37 @@ class ToDoListWidget extends StatefulWidget {
 
 class _ToDoListWidgetState extends State<ToDoListWidget> {
   @override
+  void initState() {
+    super.initState();
+    loadTasks().then((tasks) {
+      setState(() {
+        widget.toDoList.tasks = tasks;
+      });
+    });
+  }
+
+  Future<void> saveTasks(List<Task> tasks) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> taskStrings = tasks.map((e) {
+      return json.encode(e.toJson());
+    }).toList();
+    
+    await prefs.setStringList('tasks', taskStrings);
+  }
+
+  Future<List<Task>> loadTasks() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> taskStrings = prefs.getStringList('tasks') ?? [];
+
+    List<Task> tasks = taskStrings.map((e) {
+      Map<String, dynamic> taskMap = json.decode(e);
+      return Task.fromJson(taskMap);
+    }).toList();
+
+    return tasks;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -42,6 +76,8 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
           TaskWidget(
             task: widget.toDoList.tasks[i],
             onDeleteTapped: () {
+              //@TODO: set the saving logic everywhere, not only at the delete button
+              saveTasks(widget.toDoList.tasks);
               setState(() {
                 widget.toDoList.tasks.removeAt(i);
               });
