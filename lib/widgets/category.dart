@@ -217,7 +217,6 @@ class _ColorPickerRowState extends State<ColorPickerRow> {
         (index) => ColorPickerItem(
           color: taskColors[index],
           selected: index == selectedIndex,
-          // onTap: () => selectColor(index),
           onTap: () {
             selectColor(index);
             widget.onColorSelected(taskColors[index]);

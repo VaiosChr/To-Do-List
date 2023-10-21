@@ -11,34 +11,33 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //@TODO: figure out scrolling
       body: SafeArea(
         bottom: true,
         top: true,
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Text(
-                  "What's up, Vaios!",
-                  style: TextStyle(
-                    color: primaryTextColor,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                  ),
+          child: Column(
+            children: [
+              const Text(
+                "What's up, Vaios!",
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
                 ),
-                const SizedBox(height: 30),
-                const MultipleCategoryViewWidget(),
-                const SizedBox(height: 15),
-                TodaysTasksView(
-                  toDoList: ToDoList(
-                    tasks: [],
-                    name: "Today's Tasks",
-                    color: taskColors[0],
-                  ),
+              ),
+              const SizedBox(height: 30),
+              const MultipleCategoryViewWidget(),
+              const SizedBox(height: 15),
+              TodaysTasksView(
+                toDoList: ToDoList(
+                  tasks: [],
+                  name: "Today's Tasks",
+                  color: taskColors[0],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
 import '../widgets/category.dart';
-import '../widgets/to_do_list/task.dart';
 
 class CategoryPage extends StatefulWidget {
   final Category category;
@@ -17,7 +13,8 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {@override
+class _CategoryPageState extends State<CategoryPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -152,10 +149,10 @@ class _CategoryPageState extends State<CategoryPage> {@override
                                   ),
                                 ),
                                 onPressed: () {
-                                  // save the new category
                                   widget.category.name = newCategoryName;
                                   widget.category.color = newCategoryColor;
 
+                                  //@TODO: the color is nut updating when the category is edited
                                   // update the existing tasks' color
                                   for (int i = 0;
                                       i < widget.category.tasks.length;
@@ -181,35 +178,6 @@ class _CategoryPageState extends State<CategoryPage> {@override
                 ],
               ),
               const SizedBox(height: 15),
-              Row(
-                children: [
-                  const Text(
-                    "TASKS",
-                    style: TextStyle(
-                      color: greyTextColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.add,
-                      color: greyTextColor,
-                    ),
-                    onPressed: () {
-                      setState(
-                        () => widget.category.tasks.add(
-                          Task(
-                            color: widget.category.color,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
               ToDoListWidget(
                 toDoList: ToDoList(
                   tasks: widget.category.tasks,
