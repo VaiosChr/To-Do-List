@@ -2,6 +2,8 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../const/colors.dart';
+import '../custom_widgets.dart';
 import 'task.dart';
 
 class ToDoList {
@@ -9,18 +11,28 @@ class ToDoList {
   String name;
   late List<Task> tasks;
   Color color;
+  bool isTodays;
 
   ToDoList({
     this.name = "",
     required this.tasks,
     required this.color,
+    this.isTodays = false,
   });
 
   Map toJson() {
     return {
       "name": name,
       "tasks": tasks,
+      "isTodays": isTodays,
     };
+  }
+
+  void onColorChanged(Color newColor) {
+    for (var task in tasks) {
+      task.color = newColor;
+    }
+    color = newColor;
   }
 }
 
@@ -52,7 +64,7 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
     List<String> taskStrings = tasks.map((e) {
       return json.encode(e.toJson());
     }).toList();
-    
+
     await prefs.setStringList('tasks', taskStrings);
   }
 
@@ -72,6 +84,32 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          children: [
+            Text(
+              widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS",
+              style: const TextStyle(
+                color: greyTextColor,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+              ),
+            ),
+            const Spacer(),
+            AddButton(
+              onPressed: () {
+                setState(
+                  () => widget.toDoList.tasks.add(
+                    Task(
+                      color: widget.toDoList.color,
+                    ),
+                  ),
+                );
+                saveTasks(widget.toDoList.tasks);
+              },
+            ),
+          ],
+        ),
         for (int i = 0; i < widget.toDoList.tasks.length; i++)
           TaskWidget(
             task: widget.toDoList.tasks[i],

@@ -55,40 +55,12 @@ class _TodaysTasksViewState extends State<TodaysTasksView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            const Text(
-              "TODAY'S TASKS",
-              style: TextStyle(
-                color: greyTextColor,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-              ),
-            ),
-            const Spacer(),
-            IconButton(
-              icon: const Icon(
-                Icons.add,
-                color: greyTextColor,
-              ),
-              onPressed: () {
-                setState(() {
-                  widget.toDoList.tasks.add(
-                    Task(
-                      color: widget.toDoList.color,
-                    ),
-                  );
-                });
-              },
-            ),
-          ],
-        ),
         const SizedBox(height: 15),
         ToDoListWidget(
           toDoList: ToDoList(
             tasks: widget.toDoList.tasks,
-            color: widget.toDoList.color,
+            color: taskColors[0],
+            isTodays: true,
           ),
         ),
       ],

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:to_do_list/widgets/to_do_list/task.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
 import 'category.dart';
+import 'custom_widgets.dart';
 
 class MultipleCategoryViewWidget extends StatefulWidget {
   const MultipleCategoryViewWidget({super.key});
@@ -17,40 +19,112 @@ class MultipleCategoryViewWidget extends StatefulWidget {
 
 class _MultipleCategoryViewWidgetState
     extends State<MultipleCategoryViewWidget> {
-  List<Category> categories = [];
+  List<Category> categories = [
+    Category(
+      name: "Work",
+      toDoList: ToDoList(
+        name: "Work",
+        color: taskColors[0],
+        tasks: [
+          Task(
+            title: "Finish the project",
+            color: taskColors[0],
+            done: false,
+          ),
+          Task(
+            title: "Send the project",
+            color: taskColors[0],
+            done: false,
+          ),
+          Task(
+            title: "Get paid",
+            color: taskColors[0],
+            done: false,
+          ),
+        ],
+      ),
+    ),
+    Category(
+      name: "Home",
+      toDoList: ToDoList(
+        name: "Home",
+        color: taskColors[1],
+        tasks: [
+          Task(
+            title: "Clean the house",
+            color: taskColors[1],
+            done: false,
+          ),
+          Task(
+            title: "Cook dinner",
+            color: taskColors[1],
+            done: false,
+          ),
+          Task(
+            title: "Do the laundry",
+            color: taskColors[1],
+            done: false,
+          ),
+        ],
+      ),
+    ),
+    Category(
+      name: "Personal",
+      toDoList: ToDoList(
+        name: "Personal",
+        color: taskColors[2],
+        tasks: [
+          Task(
+            title: "Go to the gym",
+            color: taskColors[2],
+            done: false,
+          ),
+          Task(
+            title: "Read a book",
+            color: taskColors[2],
+            done: false,
+          ),
+          Task(
+            title: "Learn something new",
+            color: taskColors[2],
+            done: false,
+          ),
+        ],
+      ),
+    ),];
 
-  @override
-  void initState() {
-    super.initState();
-    loadCategories().then((value) {
-      setState(() {
-        categories = value;
-      });
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   loadCategories().then((value) {
+  //     setState(() {
+  //       categories = value;
+  //     });
+  //   });
+  // }
 
-  Future<List<Category>> loadCategories() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
-    List<String> categoryStrings = prefs.getStringList('categories') ?? [];
+  // Future<List<Category>> loadCategories() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   // prefs.clear();
+  //   List<String> categoryStrings = prefs.getStringList('categories') ?? [];
 
-    List<Category> categories = categoryStrings.map((e) {
-      Map<String, dynamic> categoryMap = json.decode(e);
-      return Category.fromJson(categoryMap);
-    }).toList();
+  //   List<Category> categories = categoryStrings.map((e) {
+  //     Map<String, dynamic> categoryMap = json.decode(e);
+  //     return Category.fromJson(categoryMap);
+  //   }).toList();
 
-    return categories;
-  }
+  //   return categories;
+  // }
 
-  Future<void> saveCategories(List<Category> categories) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  // Future<void> saveCategories(List<Category> categories) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List<String> categoryStrings = categories.map((e) {
-      return json.encode(e.toJson());
-    }).toList();
+  //   List<String> categoryStrings = categories.map((e) {
+  //     return json.encode(e.toJson());
+  //   }).toList();
 
-    await prefs.setStringList('categories', categoryStrings);
-  }
+  //   await prefs.setStringList('categories', categoryStrings);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +148,11 @@ class _MultipleCategoryViewWidgetState
               onPressed: () async {
                 Category newCategory = Category(
                   name: "New Category",
-                  color: taskColors[0],
+                  toDoList: ToDoList(
+                    name: "New Category",
+                    color: taskColors[0],
+                    tasks: [],
+                  ),
                 );
                 TextEditingController controller =
                     TextEditingController(text: "New Category");
@@ -134,7 +212,7 @@ class _MultipleCategoryViewWidgetState
                           ColorPickerRow(
                             initialColor: taskColors[0],
                             onColorSelected: (selectedColor) =>
-                                newCategory.color = selectedColor,
+                                newCategory.toDoList.color = selectedColor,
                           ),
                         ],
                       ),
@@ -171,7 +249,7 @@ class _MultipleCategoryViewWidgetState
                             ),
                           ),
                           onPressed: () async {
-                            await saveCategories(categories);
+                            // await saveCategories(categories);
                             Navigator.pop(context, true);
                           },
                         ),
@@ -185,7 +263,7 @@ class _MultipleCategoryViewWidgetState
 
                 if (selectedOption != null && selectedOption) {
                   setState(() => categories.add(newCategory));
-                  saveCategories(categories);
+                  // saveCategories(categories);
                 }
               },
             ),
