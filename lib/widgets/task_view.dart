@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/to_do_list/task.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
-import 'custom_widgets.dart';
 
 class TodaysTasksView extends StatefulWidget {
   final ToDoList toDoList;

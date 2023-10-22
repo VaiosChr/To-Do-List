@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
-
 import '../widgets/category.dart';
+import '../widgets/custom_widgets.dart';
 
 class CategoryPage extends StatefulWidget {
   final Category category;
@@ -52,7 +52,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     color: primaryTextColor,
                     onPressed: () {
                       String newCategoryName = widget.category.name;
-                      Color newCategoryColor = widget.category.color;
+                      Color newCategoryColor = widget.category.toDoList.color;
 
                       TextEditingController controller =
                           TextEditingController(text: widget.category.name);
@@ -110,7 +110,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ),
                                 const SizedBox(height: 20),
                                 ColorPickerRow(
-                                  initialColor: widget.category.color,
+                                  initialColor: widget.category.toDoList.color,
                                   onColorSelected: (selectedColor) =>
                                       newCategoryColor = selectedColor,
                                 ),
@@ -150,18 +150,12 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ),
                                 onPressed: () {
                                   widget.category.name = newCategoryName;
-                                  widget.category.color = newCategoryColor;
-
-                                  //@TODO: the color is nut updating when the category is edited
-                                  // update the existing tasks' color
-                                  for (int i = 0;
-                                      i < widget.category.tasks.length;
-                                      i++) {
-                                    setState(() {
-                                      widget.category.tasks[i].color =
-                                          newCategoryColor;
-                                    });
-                                  }
+                                  widget.category.toDoList.color = newCategoryColor;
+                                  
+                                  setState(() {
+                                    widget.category.toDoList
+                                        .onColorChanged(newCategoryColor);
+                                  });
 
                                   Navigator.pop(context);
                                 },
@@ -180,8 +174,8 @@ class _CategoryPageState extends State<CategoryPage> {
               const SizedBox(height: 15),
               ToDoListWidget(
                 toDoList: ToDoList(
-                  tasks: widget.category.tasks,
-                  color: widget.category.color,
+                  tasks: widget.category.toDoList.tasks,
+                  color: widget.category.toDoList.color,
                 ),
               ),
             ],

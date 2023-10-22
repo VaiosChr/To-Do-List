@@ -27,6 +27,13 @@ class ToDoList {
       "isTodays": isTodays,
     };
   }
+
+  void onColorChanged(Color newColor) {
+    for (var task in tasks) {
+      task.color = newColor;
+    }
+    color = newColor;
+  }
 }
 
 class ToDoListWidget extends StatefulWidget {
@@ -36,10 +43,6 @@ class ToDoListWidget extends StatefulWidget {
   }) : super(key: key);
 
   final ToDoList toDoList;
-
-  void changeColors(Color newColor) {
-    
-  }
 
   @override
   State<ToDoListWidget> createState() => _ToDoListWidgetState();
