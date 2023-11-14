@@ -103,7 +103,10 @@ class _TaskWidgetState extends State<TaskWidget> {
           Icons.delete_outline,
         ),
         color: alertColor,
-        onPressed: widget.onDeleteTapped,
+        onPressed: () {
+          widget.onDeleteTapped();
+          widget.onChanged();
+        },
       ),
     );
   }
