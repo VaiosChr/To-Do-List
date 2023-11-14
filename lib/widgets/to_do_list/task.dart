@@ -25,11 +25,13 @@ class Task {
 
 class TaskWidget extends StatefulWidget {
   final VoidCallback onDeleteTapped;
+  final VoidCallback onChanged;
 
   const TaskWidget({
     super.key,
     required this.task,
     required this.onDeleteTapped,
+    required this.onChanged,
   });
 
   final Task task;
@@ -48,6 +50,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       leading: InkWell(
         onTap: () {
           setState(() => widget.task.done = !widget.task.done);
+          widget.onChanged();
         },
         child: widget.task.done
             ? Container(
@@ -89,7 +92,10 @@ class _TaskWidgetState extends State<TaskWidget> {
             color: lightTextColor,
           ),
         ),
-        onChanged: (value) => widget.task.title = value,
+        onChanged: (value) {
+          widget.task.title = value;
+          widget.onChanged();
+        },
         controller: controller,
       ),
       trailing: IconButton(

@@ -114,11 +114,14 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
           TaskWidget(
             task: widget.toDoList.tasks[i],
             onDeleteTapped: () {
-              //@TODO: set the saving logic everywhere, not only at the delete button
+              //@TODO: figure out multiple saveTasks() calls
               saveTasks(widget.toDoList.tasks);
               setState(() {
                 widget.toDoList.tasks.removeAt(i);
               });
+            },
+            onChanged: () {
+              saveTasks(widget.toDoList.tasks);
             },
           ),
       ],
