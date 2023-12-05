@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
-
-import '../pages/category_page.dart';
+import 'package:to_do_list/pages/category_page.dart';
 
 class CategoryFrontView extends StatefulWidget {
   const CategoryFrontView({

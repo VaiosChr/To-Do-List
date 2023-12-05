@@ -2,9 +2,9 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../const/colors.dart';
-import '../custom_widgets.dart';
-import 'task.dart';
+import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/widgets/custom_widgets.dart';
+import 'package:to_do_list/widgets/to_do_list/task.dart';
 
 class ToDoList {
   //@TODO: set a unique ID for every toDoList object, for the saving logic
@@ -25,18 +25,18 @@ class ToDoList {
   Map toJson() {
     return {
       "name": name,
-      "tasks": tasks,
+      "tasks": tasks.map((task) => task.toJson()).toList(),
       "isTodays": isTodays,
       "color": color.value.toRadixString(16),
       "key": key.toString(),
     };
   }
-  
+
   factory ToDoList.fromJson(Map<String, dynamic> json) {
     return ToDoList(
       name: json["name"],
       tasks:
-          (json["tasks"] as List).map((task) => Task.fromJson(task)).toList(),
+          (json['tasks'] as List).map((task) => Task.fromJson(task)).toList(),
       color: Color(int.parse(json["color"], radix: 16)),
       key: Key(json["key"]),
       isTodays: json["isTodays"],
@@ -76,7 +76,6 @@ class ToDoListWidget extends StatefulWidget {
 }
 
 class _ToDoListWidgetState extends State<ToDoListWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Column(

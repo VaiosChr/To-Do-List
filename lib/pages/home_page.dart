@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
-import 'package:to_do_list/widgets/task_view.dart';
+import 'package:to_do_list/widgets/todays_task_view.dart';
 
 import '../widgets/to_do_list/to_do_list_widget.dart';
 import '../widgets/multiple_categories.dart';

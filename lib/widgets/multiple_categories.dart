@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-
-import 'package:to_do_list/widgets/to_do_list/task.dart';
-import 'package:to_do_list/const/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
-import 'category.dart';
-import 'custom_widgets.dart';
+import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
+import 'package:to_do_list/widgets/category.dart';
+import 'package:to_do_list/widgets/custom_widgets.dart';
 
 class MultipleCategoryViewWidget extends StatefulWidget {
   const MultipleCategoryViewWidget({super.key});
@@ -24,23 +22,31 @@ class _MultipleCategoryViewWidgetState
   @override
   void initState() {
     super.initState();
-    loadCategories();
+    Future.microtask(() {
+      setState(() {
+        loadCategories();
+      });
+    });
   }
-  
+
   // save categories
   Future<void> saveCategories() async {
     final prefs = await SharedPreferences.getInstance();
-    final categoriesJson = categories.map((category) => category.toJson()).toList();
+    final categoriesJson =
+        categories.map((category) => category.toJson()).toList();
     await prefs.setString('categories', jsonEncode(categoriesJson));
   }
 
   // load categories
   Future<void> loadCategories() async {
     final prefs = await SharedPreferences.getInstance();
+    // prefs.clear();
     final categoriesJson = prefs.getString('categories');
     if (categoriesJson != null) {
       final List<dynamic> categoriesList = jsonDecode(categoriesJson);
-      categories = categoriesList.map((category) => ToDoList.fromJson(category)).toList();
+      categories = categoriesList
+          .map((category) => ToDoList.fromJson(category))
+          .toList();
     }
   }
 
