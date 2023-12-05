@@ -5,78 +5,19 @@ import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
 import '../pages/category_page.dart';
 
-class Category {
-  String name;
-  ToDoList toDoList;
-  // Color color;
-
-  Category({
-    required this.name,
-    // required this.color,
+class CategoryFrontView extends StatefulWidget {
+  const CategoryFrontView({
+    super.key,
     required this.toDoList,
   });
 
-  void setName(String newName) => name = newName;
-
-  int getCompletedTasks() {
-    int completedTasks = 0;
-
-    for (var task in toDoList.tasks) {
-      if (task.done) {
-        completedTasks++;
-      }
-    }
-    return completedTasks;
-  }
-
-  // void tasksFromJson(Map<String, dynamic> json) {
-  //   tasks = (json["tasks"] as List<dynamic>)
-  //       .map((task) => Task.fromJson(task))
-  //       .toList();
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     "name": name,
-  //     'color': color.value.toRadixString(16),
-  //     // "tasks": tasks.map((task) => task.toJson()).toList(),
-  //   };
-  // }
-
-  // factory Category.fromJson(Map<String, dynamic> json) {
-  //   return Category(
-  //     name: json["name"],
-  //     color: Color(int.parse(json['color'], radix: 16)),
-  //     // tasks: (json["tasks"] as List<dynamic>)
-  //     //     .map((task) => Task.fromJson(task))
-  //     //     .toList(),
-  //   );
-  // }
-}
-
-class CategoryViewWidget extends StatefulWidget {
-  const CategoryViewWidget({
-    super.key,
-    required this.category,
-  });
-
-  final Category category;
+  final ToDoList toDoList;
 
   @override
-  State<CategoryViewWidget> createState() => _CategoryViewWidgetState();
+  State<CategoryFrontView> createState() => _CategoryFrontViewState();
 }
 
-class _CategoryViewWidgetState extends State<CategoryViewWidget> {
-  int completedTaskCount = 0;
-
-  void markTaskAsDone(int index) {
-    setState(() {
-      widget.category.toDoList.tasks[index].done = true;
-      completedTaskCount =
-          widget.category.toDoList.tasks.where((task) => task.done).length;
-    });
-  }
-
+class _CategoryFrontViewState extends State<CategoryFrontView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -91,7 +32,7 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${widget.category.toDoList.tasks.length} tasks",
+              "${widget.toDoList.tasks.length} tasks",
               style: const TextStyle(
                 color: greyTextColor,
                 letterSpacing: 1.0,
@@ -100,7 +41,7 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
             ),
             const SizedBox(height: 5),
             Text(
-              widget.category.name,
+              widget.toDoList.name,
               style: const TextStyle(
                 color: secondaryTextColor,
                 fontSize: 25,
@@ -113,13 +54,13 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
-                value: widget.category.toDoList.tasks.isNotEmpty
-                    ? widget.category.getCompletedTasks() /
-                        widget.category.toDoList.tasks.length
+                value: widget.toDoList.tasks.isNotEmpty
+                    ? widget.toDoList.getCompletedTasks() /
+                        widget.toDoList.tasks.length
                     : 0,
                 backgroundColor: whiteColor,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  widget.category.toDoList.color,
+                  widget.toDoList.color,
                 ),
                 minHeight: 6,
               ),
@@ -131,7 +72,9 @@ class _CategoryViewWidgetState extends State<CategoryViewWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CategoryPage(category: widget.category),
+            builder: (context) => CategoryPage(
+              toDoList: widget.toDoList,
+            ),
           ),
         ).then((value) {
           setState(() {});

@@ -35,6 +35,7 @@ class HomePage extends StatelessWidget {
                   tasks: [],
                   name: "Today's Tasks",
                   color: taskColors[0],
+                  key: UniqueKey(),
                 ),
               ),
             ],

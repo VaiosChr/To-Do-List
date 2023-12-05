@@ -19,112 +19,30 @@ class MultipleCategoryViewWidget extends StatefulWidget {
 
 class _MultipleCategoryViewWidgetState
     extends State<MultipleCategoryViewWidget> {
-  List<Category> categories = [
-    Category(
-      name: "Work",
-      toDoList: ToDoList(
-        name: "Work",
-        color: taskColors[0],
-        tasks: [
-          Task(
-            title: "Finish the project",
-            color: taskColors[0],
-            done: false,
-          ),
-          Task(
-            title: "Send the project",
-            color: taskColors[0],
-            done: false,
-          ),
-          Task(
-            title: "Get paid",
-            color: taskColors[0],
-            done: false,
-          ),
-        ],
-      ),
-    ),
-    Category(
-      name: "Home",
-      toDoList: ToDoList(
-        name: "Home",
-        color: taskColors[1],
-        tasks: [
-          Task(
-            title: "Clean the house",
-            color: taskColors[1],
-            done: false,
-          ),
-          Task(
-            title: "Cook dinner",
-            color: taskColors[1],
-            done: false,
-          ),
-          Task(
-            title: "Do the laundry",
-            color: taskColors[1],
-            done: false,
-          ),
-        ],
-      ),
-    ),
-    Category(
-      name: "Personal",
-      toDoList: ToDoList(
-        name: "Personal",
-        color: taskColors[2],
-        tasks: [
-          Task(
-            title: "Go to the gym",
-            color: taskColors[2],
-            done: false,
-          ),
-          Task(
-            title: "Read a book",
-            color: taskColors[2],
-            done: false,
-          ),
-          Task(
-            title: "Learn something new",
-            color: taskColors[2],
-            done: false,
-          ),
-        ],
-      ),
-    ),];
+  List<ToDoList> categories = [];
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   loadCategories().then((value) {
-  //     setState(() {
-  //       categories = value;
-  //     });
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    loadCategories();
+  }
+  
+  // save categories
+  Future<void> saveCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    final categoriesJson = categories.map((category) => category.toJson()).toList();
+    await prefs.setString('categories', jsonEncode(categoriesJson));
+  }
 
-  // Future<List<Category>> loadCategories() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   // prefs.clear();
-  //   List<String> categoryStrings = prefs.getStringList('categories') ?? [];
-
-  //   List<Category> categories = categoryStrings.map((e) {
-  //     Map<String, dynamic> categoryMap = json.decode(e);
-  //     return Category.fromJson(categoryMap);
-  //   }).toList();
-
-  //   return categories;
-  // }
-
-  // Future<void> saveCategories(List<Category> categories) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   List<String> categoryStrings = categories.map((e) {
-  //     return json.encode(e.toJson());
-  //   }).toList();
-
-  //   await prefs.setStringList('categories', categoryStrings);
-  // }
+  // load categories
+  Future<void> loadCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    final categoriesJson = prefs.getString('categories');
+    if (categoriesJson != null) {
+      final List<dynamic> categoriesList = jsonDecode(categoriesJson);
+      categories = categoriesList.map((category) => ToDoList.fromJson(category)).toList();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +64,11 @@ class _MultipleCategoryViewWidgetState
             IconButton(
               icon: const Icon(Icons.add, color: greyTextColor),
               onPressed: () async {
-                Category newCategory = Category(
+                ToDoList newToDoList = ToDoList(
                   name: "New Category",
-                  toDoList: ToDoList(
-                    name: "New Category",
-                    color: taskColors[0],
-                    tasks: [],
-                  ),
+                  color: taskColors[0],
+                  tasks: [],
+                  key: UniqueKey(),
                 );
                 TextEditingController controller =
                     TextEditingController(text: "New Category");
@@ -206,13 +122,13 @@ class _MultipleCategoryViewWidgetState
                                 onPressed: () => controller.clear(),
                               ),
                             ),
-                            onChanged: (value) => newCategory.name = value,
+                            onChanged: (value) => newToDoList.name = value,
                           ),
                           const SizedBox(height: 20),
                           ColorPickerRow(
                             initialColor: taskColors[0],
                             onColorSelected: (selectedColor) =>
-                                newCategory.toDoList.color = selectedColor,
+                                newToDoList.color = selectedColor,
                           ),
                         ],
                       ),
@@ -249,7 +165,7 @@ class _MultipleCategoryViewWidgetState
                             ),
                           ),
                           onPressed: () async {
-                            // await saveCategories(categories);
+                            await saveCategories();
                             Navigator.pop(context, true);
                           },
                         ),
@@ -262,8 +178,8 @@ class _MultipleCategoryViewWidgetState
                 );
 
                 if (selectedOption != null && selectedOption) {
-                  setState(() => categories.add(newCategory));
-                  // saveCategories(categories);
+                  setState(() => categories.add(newToDoList));
+                  await saveCategories();
                 }
               },
             ),
@@ -277,13 +193,14 @@ class _MultipleCategoryViewWidgetState
               for (int i = 0; i < categories.length - 1; i++)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: CategoryViewWidget(
-                    category: categories[i],
+                  child: CategoryFrontView(
+                    toDoList: categories[i],
                   ),
                 ),
-              if (categories.isNotEmpty) CategoryViewWidget(
-                category: categories[categories.length - 1],
-              ),
+              if (categories.isNotEmpty)
+                CategoryFrontView(
+                  toDoList: categories[categories.length - 1],
+                ),
             ],
           ),
         ),

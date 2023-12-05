@@ -5,7 +5,6 @@ C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debu
 C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/FontManifest.json
 C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
 C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/kernel_blob.bin
-C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/NOTICES
 C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/NOTICES.Z
 C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
 C:/Users/Vaios Christodoulou/Coding/Flutter/To-Do-List/build/windows/runner/Debug/data/flutter_assets/packages/fluttertoast/assets/toastify.css

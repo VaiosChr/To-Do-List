@@ -12,11 +12,13 @@ class ToDoList {
   late List<Task> tasks;
   Color color;
   bool isTodays;
+  late final Key key;
 
   ToDoList({
     this.name = "",
     required this.tasks,
     required this.color,
+    required this.key,
     this.isTodays = false,
   });
 
@@ -25,14 +27,39 @@ class ToDoList {
       "name": name,
       "tasks": tasks,
       "isTodays": isTodays,
+      "color": color.value.toRadixString(16),
+      "key": key.toString(),
     };
   }
+  
+  factory ToDoList.fromJson(Map<String, dynamic> json) {
+    return ToDoList(
+      name: json["name"],
+      tasks:
+          (json["tasks"] as List).map((task) => Task.fromJson(task)).toList(),
+      color: Color(int.parse(json["color"], radix: 16)),
+      key: Key(json["key"]),
+      isTodays: json["isTodays"],
+    );
+  }
 
+  // utilities
   void onColorChanged(Color newColor) {
     for (var task in tasks) {
       task.color = newColor;
     }
     color = newColor;
+  }
+
+  int getCompletedTasks() {
+    int completedTasks = 0;
+
+    for (var task in tasks) {
+      if (task.done) {
+        completedTasks++;
+      }
+    }
+    return completedTasks;
   }
 }
 
@@ -49,36 +76,6 @@ class ToDoListWidget extends StatefulWidget {
 }
 
 class _ToDoListWidgetState extends State<ToDoListWidget> {
-  @override
-  void initState() {
-    super.initState();
-    loadTasks().then((tasks) {
-      setState(() {
-        widget.toDoList.tasks = tasks;
-      });
-    });
-  }
-
-  Future<void> saveTasks(List<Task> tasks) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> taskStrings = tasks.map((e) {
-      return json.encode(e.toJson());
-    }).toList();
-
-    await prefs.setStringList('tasks', taskStrings);
-  }
-
-  Future<List<Task>> loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> taskStrings = prefs.getStringList('tasks') ?? [];
-
-    List<Task> tasks = taskStrings.map((e) {
-      Map<String, dynamic> taskMap = json.decode(e);
-      return Task.fromJson(taskMap);
-    }).toList();
-
-    return tasks;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +102,7 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
                     ),
                   ),
                 );
-                saveTasks(widget.toDoList.tasks);
+                // saveTasks(widget.toDoList.tasks);
               },
             ),
           ],
@@ -117,7 +114,7 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
               setState(() => widget.toDoList.tasks.removeAt(i));
             },
             onChanged: () {
-              saveTasks(widget.toDoList.tasks);
+              // saveTasks(widget.toDoList.tasks);
             },
           ),
       ],

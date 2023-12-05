@@ -19,7 +19,7 @@ class TodaysTasksView extends StatefulWidget {
 }
 
 class _TodaysTasksViewState extends State<TodaysTasksView> {
-  @override 
+  @override
   void initState() {
     super.initState();
     loadTasks().then((value) {
@@ -60,6 +60,7 @@ class _TodaysTasksViewState extends State<TodaysTasksView> {
           toDoList: ToDoList(
             tasks: widget.toDoList.tasks,
             color: taskColors[0],
+            key: UniqueKey(),
             isTodays: true,
           ),
         ),
