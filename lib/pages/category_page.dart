@@ -152,8 +152,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ),
                                 onPressed: () {
                                   widget.toDoList.name = newCategoryName;
-                                  widget.toDoList.color =
-                                      newCategoryColor;
+                                  widget.toDoList.color = newCategoryColor;
 
                                   setState(() {
                                     widget.toDoList
@@ -179,7 +178,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 toDoList: ToDoList(
                   tasks: widget.toDoList.tasks,
                   color: widget.toDoList.color,
-                  key: UniqueKey(),
+                  key: widget.toDoList.key,
                 ),
               ),
             ],

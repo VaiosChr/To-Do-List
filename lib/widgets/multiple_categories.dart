@@ -1,8 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/preferences.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 import 'package:to_do_list/widgets/category.dart';
 import 'package:to_do_list/widgets/custom_widgets.dart';
@@ -24,30 +23,17 @@ class _MultipleCategoryViewWidgetState
     super.initState();
     Future.microtask(() {
       setState(() {
-        loadCategories();
+        loadCategoriesFromPrefs();
       });
     });
   }
 
-  // save categories
-  Future<void> saveCategories() async {
-    final prefs = await SharedPreferences.getInstance();
-    final categoriesJson =
-        categories.map((category) => category.toJson()).toList();
-    await prefs.setString('categories', jsonEncode(categoriesJson));
+  void loadCategoriesFromPrefs() async {
+    categories = await SharedPreferencesService.loadCategories();
   }
 
-  // load categories
-  Future<void> loadCategories() async {
-    final prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
-    final categoriesJson = prefs.getString('categories');
-    if (categoriesJson != null) {
-      final List<dynamic> categoriesList = jsonDecode(categoriesJson);
-      categories = categoriesList
-          .map((category) => ToDoList.fromJson(category))
-          .toList();
-    }
+  void saveCategoriesFromPrefs() {
+    SharedPreferencesService.saveCategories(categories);
   }
 
   @override
@@ -170,8 +156,8 @@ class _MultipleCategoryViewWidgetState
                               letterSpacing: 1.5,
                             ),
                           ),
-                          onPressed: () async {
-                            await saveCategories();
+                          onPressed: () {
+                            SharedPreferencesService.saveCategories(categories);
                             Navigator.pop(context, true);
                           },
                         ),
@@ -185,7 +171,7 @@ class _MultipleCategoryViewWidgetState
 
                 if (selectedOption != null && selectedOption) {
                   setState(() => categories.add(newToDoList));
-                  await saveCategories();
+                  SharedPreferencesService.saveCategories(categories);
                 }
               },
             ),

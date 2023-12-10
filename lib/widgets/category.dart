@@ -31,7 +31,7 @@ class _CategoryFrontViewState extends State<CategoryFrontView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${widget.toDoList.tasks.length} tasks",
+              "${widget.toDoList.tasks.length} task${widget.toDoList.tasks.length != 1 ? "s" : ""}",
               style: const TextStyle(
                 color: greyTextColor,
                 letterSpacing: 1.0,

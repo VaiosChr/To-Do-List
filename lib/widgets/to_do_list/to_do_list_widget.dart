@@ -1,8 +1,7 @@
-import 'dart:convert';
 import "package:flutter/material.dart";
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/preferences.dart';
 import 'package:to_do_list/widgets/custom_widgets.dart';
 import 'package:to_do_list/widgets/to_do_list/task.dart';
 
@@ -12,7 +11,7 @@ class ToDoList {
   late List<Task> tasks;
   Color color;
   bool isTodays;
-  late final Key key;
+  final Key key;
 
   ToDoList({
     this.name = "",
@@ -101,7 +100,7 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
                     ),
                   ),
                 );
-                // saveTasks(widget.toDoList.tasks);
+                SharedPreferencesService.updateList(widget.toDoList);
               },
             ),
           ],
@@ -113,24 +112,10 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
               setState(() => widget.toDoList.tasks.removeAt(i));
             },
             onChanged: () {
-              // saveTasks(widget.toDoList.tasks);
+              SharedPreferencesService.updateList(widget.toDoList);
             },
           ),
       ],
     );
-    // return ListView.builder(
-    //   shrinkWrap: true,
-    //   itemCount: widget.toDoList.tasks.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return TaskWidget(
-    //       task: widget.toDoList.tasks[index],
-    //       onDeleteTapped: () {
-    //         setState(() {
-    //           widget.toDoList.tasks.removeAt(index);
-    //         });
-    //       },
-    //     );
-    //   },
-    // );
   }
 }
