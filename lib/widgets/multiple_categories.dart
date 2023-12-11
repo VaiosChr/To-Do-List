@@ -36,6 +36,48 @@ class _MultipleCategoryViewWidgetState
     SharedPreferencesService.saveCategories(categories);
   }
 
+  void deleteCategory(int index) async {
+    final bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Confirm Delete",
+            style: TextStyle(
+              color: primaryTextColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
+          ),
+          content: Text(
+            "Are you sure you want to delete ${categories[index].name}?",
+            style: const TextStyle(
+              color: secondaryTextColor,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () => Navigator.pop(context, false),
+            ),
+            TextButton(
+              child: const Text("Delete"),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!confirm) return;
+    setState(() => categories.removeAt(index));
+    SharedPreferencesService.saveCategories(categories);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -187,18 +229,13 @@ class _MultipleCategoryViewWidgetState
                   padding: const EdgeInsets.only(right: 10),
                   child: CategoryFrontView(
                     toDoList: categories[i],
-                    onDeleteTapped: () {
-                      setState(() => categories.removeAt(i));
-                      SharedPreferencesService.saveCategories(categories);
-                    },
+                    onDeleteTapped: () => deleteCategory(i),
                   ),
                 ),
               if (categories.isNotEmpty)
                 CategoryFrontView(
                   toDoList: categories[categories.length - 1],
-                  onDeleteTapped: () {
-                    setState(() => categories.removeLast());
-                    SharedPreferencesService.saveCategories(categories);}
+                  onDeleteTapped: () => deleteCategory(categories.length - 1),
                 ),
             ],
           ),
