@@ -8,9 +8,11 @@ class CategoryFrontView extends StatefulWidget {
   const CategoryFrontView({
     super.key,
     required this.toDoList,
+    required this.onDeleteTapped,
   });
 
   final ToDoList toDoList;
+  final VoidCallback onDeleteTapped;
 
   @override
   State<CategoryFrontView> createState() => _CategoryFrontViewState();
@@ -30,13 +32,26 @@ class _CategoryFrontViewState extends State<CategoryFrontView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "${widget.toDoList.tasks.length} task${widget.toDoList.tasks.length != 1 ? "s" : ""}",
-              style: const TextStyle(
-                color: greyTextColor,
-                letterSpacing: 1.0,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "${widget.toDoList.tasks.length} task${widget.toDoList.tasks.length != 1 ? "s" : ""}",
+                  style: const TextStyle(
+                    color: greyTextColor,
+                    letterSpacing: 1.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete_outline,
+                  ),
+                  color: alertColor,
+                  iconSize: 18,
+                  onPressed: widget.onDeleteTapped,
+                ),
+              ],
             ),
             const SizedBox(height: 5),
             Text(

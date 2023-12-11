@@ -187,11 +187,18 @@ class _MultipleCategoryViewWidgetState
                   padding: const EdgeInsets.only(right: 10),
                   child: CategoryFrontView(
                     toDoList: categories[i],
+                    onDeleteTapped: () {
+                      setState(() => categories.removeAt(i));
+                      SharedPreferencesService.saveCategories(categories);
+                    },
                   ),
                 ),
               if (categories.isNotEmpty)
                 CategoryFrontView(
                   toDoList: categories[categories.length - 1],
+                  onDeleteTapped: () {
+                    setState(() => categories.removeLast());
+                    SharedPreferencesService.saveCategories(categories);}
                 ),
             ],
           ),
