@@ -16,7 +16,14 @@ class MultipleCategoryViewWidget extends StatefulWidget {
 
 class _MultipleCategoryViewWidgetState
     extends State<MultipleCategoryViewWidget> {
-  List<ToDoList> categories = [];
+  List<ToDoList> categories = [
+    ToDoList(
+      name: "Today's Tasks",
+      color: greyTextColor,
+      tasks: [],
+      key: UniqueKey(),
+    ),
+  ];
 
   @override
   void initState() {
@@ -29,7 +36,13 @@ class _MultipleCategoryViewWidgetState
   }
 
   void loadCategoriesFromPrefs() async {
-    categories = await SharedPreferencesService.loadCategories();
+    List<ToDoList> tempCategories = await SharedPreferencesService.loadCategories();
+    
+    if (tempCategories.isNotEmpty) {
+      setState(() {
+        categories = tempCategories;
+      });
+    }
   }
 
   void saveCategoriesFromPrefs() {
@@ -61,14 +74,40 @@ class _MultipleCategoryViewWidgetState
           ),
           actions: [
             TextButton(
-              child: const Text("Cancel"),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
               onPressed: () => Navigator.pop(context, false),
             ),
             TextButton(
-              child: const Text("Delete"),
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
               onPressed: () => Navigator.pop(context, true),
             ),
           ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         );
       },
     );
@@ -86,15 +125,7 @@ class _MultipleCategoryViewWidgetState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "CATEGORIES",
-              style: TextStyle(
-                color: greyTextColor,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-              ),
-            ),
+            const GreyText(text: 'CATEGORIES'),
             IconButton(
               icon: const Icon(Icons.add, color: greyTextColor),
               onPressed: () async {
@@ -224,7 +255,7 @@ class _MultipleCategoryViewWidgetState
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              for (int i = 0; i < categories.length - 1; i++)
+              for (int i = 1; i < categories.length - 1; i++)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: CategoryFrontView(
@@ -232,13 +263,17 @@ class _MultipleCategoryViewWidgetState
                     onDeleteTapped: () => deleteCategory(i),
                   ),
                 ),
-              if (categories.isNotEmpty)
+              if (categories.length > 1)
                 CategoryFrontView(
                   toDoList: categories[categories.length - 1],
                   onDeleteTapped: () => deleteCategory(categories.length - 1),
                 ),
             ],
           ),
+        ),
+        const SizedBox(height: 15),
+        ToDoListWidget(
+          toDoList: categories[0],
         ),
       ],
     );

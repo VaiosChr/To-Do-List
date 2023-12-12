@@ -26,7 +26,8 @@ class _CategoryFrontViewState extends State<CategoryFrontView> {
         padding: const EdgeInsets.all(10),
         width: 200,
         decoration: BoxDecoration(
-          color: tileColor,
+          // color: tileColor,
+          color: widget.toDoList.color.withOpacity(0.2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
@@ -47,7 +48,7 @@ class _CategoryFrontViewState extends State<CategoryFrontView> {
                   icon: const Icon(
                     Icons.delete_outline,
                   ),
-                  color: alertColor,
+                  color: greyTextColor,
                   iconSize: 18,
                   onPressed: widget.onDeleteTapped,
                 ),

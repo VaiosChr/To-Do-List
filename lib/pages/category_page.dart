@@ -28,30 +28,23 @@ class _CategoryPageState extends State<CategoryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
-                      color: primaryTextColor,
+                      color: greyTextColor,
                       size: 20,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  Text(
-                    widget.toDoList.name,
-                    style: const TextStyle(
-                      color: primaryTextColor,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                  const Spacer(),
+                  TitleText(text: widget.toDoList.name),
+                  // const Spacer(),s
                   IconButton(
-                    icon: const Icon(Icons.edit_calendar_outlined),
-                    color: primaryTextColor,
+                    icon: const Icon(Icons.more_vert),
+                    color: greyTextColor,
                     onPressed: () {
                       String newCategoryName = widget.toDoList.name;
                       Color newCategoryColor = widget.toDoList.color;

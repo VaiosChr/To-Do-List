@@ -109,3 +109,46 @@ class _ColorPickerRowState extends State<ColorPickerRow> {
     );
   }
 }
+
+class TitleText extends StatelessWidget {
+  final String text;
+
+  const TitleText({
+    required this.text,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: primaryTextColor,
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+class GreyText extends StatelessWidget {
+  final String text;
+
+  const GreyText({
+    required this.text,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: greyTextColor,
+        fontSize: 15,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 2.0,
+      ),
+    );
+  }
+}

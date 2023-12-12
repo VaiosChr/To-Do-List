@@ -19,37 +19,37 @@ class TodaysTasksView extends StatefulWidget {
 }
 
 class _TodaysTasksViewState extends State<TodaysTasksView> {
-  @override
-  void initState() {
-    super.initState();
-    loadTasks().then((value) {
-      setState(() {
-        widget.toDoList.tasks = value;
-      });
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   loadTasks().then((value) {
+  //     setState(() {
+  //       widget.toDoList.tasks = value;
+  //     });
+  //   });
+  // }
 
-  Future<List<Task>> loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> taskStrings = prefs.getStringList('tasks') ?? [];
+  // Future<List<Task>> loadTasks() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   List<String> taskStrings = prefs.getStringList('tasks') ?? [];
 
-    List<Task> loadedTasks = taskStrings.map((e) {
-      Map<String, dynamic> taskMap = json.decode(e);
-      return Task.fromJson(taskMap);
-    }).toList();
+  //   List<Task> loadedTasks = taskStrings.map((e) {
+  //     Map<String, dynamic> taskMap = json.decode(e);
+  //     return Task.fromJson(taskMap);
+  //   }).toList();
 
-    return loadedTasks;
-  }
+  //   return loadedTasks;
+  // }
 
-  Future<void> saveTasks(List<Task> tasks) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  // Future<void> saveTasks(List<Task> tasks) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List<String> taskStrings = tasks.map((e) {
-      return json.encode(e.toJson());
-    }).toList();
+  //   List<String> taskStrings = tasks.map((e) {
+  //     return json.encode(e.toJson());
+  //   }).toList();
 
-    await prefs.setStringList('tasks', taskStrings);
-  }
+  //   await prefs.setStringList('tasks', taskStrings);
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -81,15 +81,7 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
       children: [
         Row(
           children: [
-            Text(
-              widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS",
-              style: const TextStyle(
-                color: greyTextColor,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-              ),
-            ),
+            GreyText(text: widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS"),
             const Spacer(),
             AddButton(
               onPressed: () {
