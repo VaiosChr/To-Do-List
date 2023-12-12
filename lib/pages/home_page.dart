@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
-import 'package:to_do_list/widgets/todays_task_view.dart';
 
 import '../widgets/custom_widgets.dart';
 import '../widgets/to_do_list/to_do_list_widget.dart';
