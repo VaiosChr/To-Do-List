@@ -26,7 +26,6 @@ class _CategoryFrontViewState extends State<CategoryFrontView> {
         padding: const EdgeInsets.all(10),
         width: 200,
         decoration: BoxDecoration(
-          // color: tileColor,
           color: widget.toDoList.color.withOpacity(0.2),
           borderRadius: BorderRadius.circular(8),
         ),
