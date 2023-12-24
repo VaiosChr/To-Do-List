@@ -21,7 +21,8 @@ class _MultipleCategoryViewWidgetState
       name: "Today's Tasks",
       color: greyTextColor,
       tasks: [],
-      key: UniqueKey(),
+      isTodays: true,
+      key: UniqueKey().toString(),
     ),
   ];
 
@@ -36,8 +37,9 @@ class _MultipleCategoryViewWidgetState
   }
 
   void loadCategoriesFromPrefs() async {
-    List<ToDoList> tempCategories = await SharedPreferencesService.loadCategories();
-    
+    List<ToDoList> tempCategories =
+        await SharedPreferencesService.loadCategories();
+
     if (tempCategories.isNotEmpty) {
       setState(() {
         categories = tempCategories;
@@ -133,7 +135,7 @@ class _MultipleCategoryViewWidgetState
                   name: "New Category",
                   color: taskColors[0],
                   tasks: [],
-                  key: UniqueKey(),
+                  key: UniqueKey().toString(),
                 );
                 TextEditingController controller =
                     TextEditingController(text: "New Category");

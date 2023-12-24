@@ -21,18 +21,19 @@ class SharedPreferencesService {
           .map((toDoList) => ToDoList.fromJson(toDoList))
           .toList();
     }
-    
+
     return [];
   }
 
   static Future<void> updateList(ToDoList toDoList) async {
+    ///@TODO: when there is no category the today's doesn't save
+    ///@TODO: some times when reloading too many times, the name gets erased
     List<ToDoList> categories = [];
     categories = await loadCategories();
 
-    ///@TODO: this saving logic almost works!!!
     for (int i = 0; i < categories.length; i++) {
-      if (categories[i].key.toString() == toDoList.key.toString()) {
-        categories[i].tasks = toDoList.tasks;
+      if (categories[i].key == toDoList.key) {
+        categories[i] = toDoList;
         saveCategories(categories);
         break;
       }

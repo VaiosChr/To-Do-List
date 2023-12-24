@@ -6,12 +6,11 @@ import 'package:to_do_list/widgets/custom_widgets.dart';
 import 'package:to_do_list/widgets/to_do_list/task.dart';
 
 class ToDoList {
-  //@TODO: set a unique ID for every toDoList object, for the saving logic
   String name;
   late List<Task> tasks;
   Color color;
   bool isTodays;
-  final Key key;
+  final String key;
 
   ToDoList({
     this.name = "",
@@ -37,7 +36,7 @@ class ToDoList {
       tasks:
           (json['tasks'] as List).map((task) => Task.fromJson(task)).toList(),
       color: Color(int.parse(json["color"], radix: 16)),
-      key: Key(json["key"]),
+      key: json["key"],
       isTodays: json["isTodays"],
     );
   }
@@ -81,7 +80,8 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
       children: [
         Row(
           children: [
-            GreyText(text: widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS"),
+            GreyText(
+                text: widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS"),
             const Spacer(),
             AddButton(
               onPressed: () {

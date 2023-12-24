@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/preferences.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 import '../widgets/custom_widgets.dart';
 
@@ -151,6 +152,8 @@ class _CategoryPageState extends State<CategoryPage> {
                                     widget.toDoList
                                         .onColorChanged(newCategoryColor);
                                   });
+                                  SharedPreferencesService.updateList(
+                                      widget.toDoList);
 
                                   Navigator.pop(context);
                                 },
