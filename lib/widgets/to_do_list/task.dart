@@ -7,7 +7,7 @@ class Task {
   Color color = taskColors[0];
 
   Task({this.title = "", this.done = false, required this.color});
-  
+
   Map<String, dynamic> toJson() => {
         "title": title,
         "done": done,
@@ -45,7 +45,7 @@ class _TaskWidgetState extends State<TaskWidget> {
   Widget build(BuildContext context) {
     TextEditingController controller =
         TextEditingController(text: widget.task.title);
-    
+
     return ListTile(
       leading: InkWell(
         onTap: () {

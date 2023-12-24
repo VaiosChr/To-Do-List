@@ -1,10 +1,9 @@
-import 'dart:convert';
 import "package:flutter/material.dart";
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../const/colors.dart';
-import '../custom_widgets.dart';
-import 'task.dart';
+import 'package:to_do_list/const/colors.dart';
+import 'package:to_do_list/preferences.dart';
+import 'package:to_do_list/widgets/custom_widgets.dart';
+import 'package:to_do_list/widgets/to_do_list/task.dart';
 
 class ToDoList {
   //@TODO: set a unique ID for every toDoList object, for the saving logic
@@ -12,27 +11,54 @@ class ToDoList {
   late List<Task> tasks;
   Color color;
   bool isTodays;
+  final Key key;
 
   ToDoList({
     this.name = "",
     required this.tasks,
     required this.color,
+    required this.key,
     this.isTodays = false,
   });
 
   Map toJson() {
     return {
       "name": name,
-      "tasks": tasks,
+      "tasks": tasks.map((task) => task.toJson()).toList(),
       "isTodays": isTodays,
+      "color": color.value.toRadixString(16),
+      "key": key.toString(),
     };
   }
 
+  factory ToDoList.fromJson(Map<String, dynamic> json) {
+    return ToDoList(
+      name: json["name"],
+      tasks:
+          (json['tasks'] as List).map((task) => Task.fromJson(task)).toList(),
+      color: Color(int.parse(json["color"], radix: 16)),
+      key: Key(json["key"]),
+      isTodays: json["isTodays"],
+    );
+  }
+
+  // utilities
   void onColorChanged(Color newColor) {
     for (var task in tasks) {
       task.color = newColor;
     }
     color = newColor;
+  }
+
+  int getCompletedTasks() {
+    int completedTasks = 0;
+
+    for (var task in tasks) {
+      if (task.done) {
+        completedTasks++;
+      }
+    }
+    return completedTasks;
   }
 }
 
@@ -50,51 +76,12 @@ class ToDoListWidget extends StatefulWidget {
 
 class _ToDoListWidgetState extends State<ToDoListWidget> {
   @override
-  void initState() {
-    super.initState();
-    loadTasks().then((tasks) {
-      setState(() {
-        widget.toDoList.tasks = tasks;
-      });
-    });
-  }
-
-  Future<void> saveTasks(List<Task> tasks) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> taskStrings = tasks.map((e) {
-      return json.encode(e.toJson());
-    }).toList();
-
-    await prefs.setStringList('tasks', taskStrings);
-  }
-
-  Future<List<Task>> loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> taskStrings = prefs.getStringList('tasks') ?? [];
-
-    List<Task> tasks = taskStrings.map((e) {
-      Map<String, dynamic> taskMap = json.decode(e);
-      return Task.fromJson(taskMap);
-    }).toList();
-
-    return tasks;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
-            Text(
-              widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS",
-              style: const TextStyle(
-                color: greyTextColor,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-              ),
-            ),
+            GreyText(text: widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS"),
             const Spacer(),
             AddButton(
               onPressed: () {
@@ -105,7 +92,7 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
                     ),
                   ),
                 );
-                saveTasks(widget.toDoList.tasks);
+                SharedPreferencesService.updateList(widget.toDoList);
               },
             ),
           ],
@@ -117,24 +104,10 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
               setState(() => widget.toDoList.tasks.removeAt(i));
             },
             onChanged: () {
-              saveTasks(widget.toDoList.tasks);
+              SharedPreferencesService.updateList(widget.toDoList);
             },
           ),
       ],
     );
-    // return ListView.builder(
-    //   shrinkWrap: true,
-    //   itemCount: widget.toDoList.tasks.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return TaskWidget(
-    //       task: widget.toDoList.tasks[index],
-    //       onDeleteTapped: () {
-    //         setState(() {
-    //           widget.toDoList.tasks.removeAt(index);
-    //         });
-    //       },
-    //     );
-    //   },
-    // );
   }
 }

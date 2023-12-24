@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
-import '../widgets/category.dart';
 import '../widgets/custom_widgets.dart';
 
 class CategoryPage extends StatefulWidget {
-  final Category category;
+  final ToDoList toDoList;
 
-  const CategoryPage({required this.category, super.key});
+  const CategoryPage({
+    required this.toDoList,
+    super.key,
+  });
 
   @override
   State<CategoryPage> createState() => _CategoryPageState();
@@ -26,36 +28,29 @@ class _CategoryPageState extends State<CategoryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
-                      color: primaryTextColor,
+                      color: greyTextColor,
                       size: 20,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  Text(
-                    widget.category.name,
-                    style: const TextStyle(
-                      color: primaryTextColor,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                  const Spacer(),
+                  TitleText(text: widget.toDoList.name),
+                  // const Spacer(),s
                   IconButton(
-                    icon: const Icon(Icons.edit_calendar_outlined),
-                    color: primaryTextColor,
+                    icon: const Icon(Icons.more_vert),
+                    color: greyTextColor,
                     onPressed: () {
-                      String newCategoryName = widget.category.name;
-                      Color newCategoryColor = widget.category.toDoList.color;
+                      String newCategoryName = widget.toDoList.name;
+                      Color newCategoryColor = widget.toDoList.color;
 
                       TextEditingController controller =
-                          TextEditingController(text: widget.category.name);
+                          TextEditingController(text: widget.toDoList.name);
 
                       showDialog(
                         context: context,
@@ -110,7 +105,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ),
                                 const SizedBox(height: 20),
                                 ColorPickerRow(
-                                  initialColor: widget.category.toDoList.color,
+                                  initialColor: widget.toDoList.color,
                                   onColorSelected: (selectedColor) =>
                                       newCategoryColor = selectedColor,
                                 ),
@@ -149,11 +144,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  widget.category.name = newCategoryName;
-                                  widget.category.toDoList.color = newCategoryColor;
-                                  
+                                  widget.toDoList.name = newCategoryName;
+                                  widget.toDoList.color = newCategoryColor;
+
                                   setState(() {
-                                    widget.category.toDoList
+                                    widget.toDoList
                                         .onColorChanged(newCategoryColor);
                                   });
 
@@ -174,8 +169,9 @@ class _CategoryPageState extends State<CategoryPage> {
               const SizedBox(height: 15),
               ToDoListWidget(
                 toDoList: ToDoList(
-                  tasks: widget.category.toDoList.tasks,
-                  color: widget.category.toDoList.color,
+                  tasks: widget.toDoList.tasks,
+                  color: widget.toDoList.color,
+                  key: widget.toDoList.key,
                 ),
               ),
             ],

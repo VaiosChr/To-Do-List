@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'package:to_do_list/widgets/to_do_list/task.dart';
 import 'package:to_do_list/const/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:to_do_list/preferences.dart';
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
-
-import 'category.dart';
-import 'custom_widgets.dart';
+import 'package:to_do_list/widgets/category.dart';
+import 'package:to_do_list/widgets/custom_widgets.dart';
 
 class MultipleCategoryViewWidget extends StatefulWidget {
   const MultipleCategoryViewWidget({super.key});
@@ -19,112 +16,106 @@ class MultipleCategoryViewWidget extends StatefulWidget {
 
 class _MultipleCategoryViewWidgetState
     extends State<MultipleCategoryViewWidget> {
-  List<Category> categories = [
-    Category(
-      name: "Work",
-      toDoList: ToDoList(
-        name: "Work",
-        color: taskColors[0],
-        tasks: [
-          Task(
-            title: "Finish the project",
-            color: taskColors[0],
-            done: false,
-          ),
-          Task(
-            title: "Send the project",
-            color: taskColors[0],
-            done: false,
-          ),
-          Task(
-            title: "Get paid",
-            color: taskColors[0],
-            done: false,
-          ),
-        ],
-      ),
+  List<ToDoList> categories = [
+    ToDoList(
+      name: "Today's Tasks",
+      color: greyTextColor,
+      tasks: [],
+      key: UniqueKey(),
     ),
-    Category(
-      name: "Home",
-      toDoList: ToDoList(
-        name: "Home",
-        color: taskColors[1],
-        tasks: [
-          Task(
-            title: "Clean the house",
-            color: taskColors[1],
-            done: false,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      setState(() {
+        loadCategoriesFromPrefs();
+      });
+    });
+  }
+
+  void loadCategoriesFromPrefs() async {
+    List<ToDoList> tempCategories = await SharedPreferencesService.loadCategories();
+    
+    if (tempCategories.isNotEmpty) {
+      setState(() {
+        categories = tempCategories;
+      });
+    }
+  }
+
+  void saveCategoriesFromPrefs() {
+    SharedPreferencesService.saveCategories(categories);
+  }
+
+  void deleteCategory(int index) async {
+    final bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Confirm Delete",
+            style: TextStyle(
+              color: primaryTextColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
           ),
-          Task(
-            title: "Cook dinner",
-            color: taskColors[1],
-            done: false,
+          content: Text(
+            "Are you sure you want to delete ${categories[index].name}?",
+            style: const TextStyle(
+              color: secondaryTextColor,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
           ),
-          Task(
-            title: "Do the laundry",
-            color: taskColors[1],
-            done: false,
+          actions: [
+            TextButton(
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              onPressed: () => Navigator.pop(context, false),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        ],
-      ),
-    ),
-    Category(
-      name: "Personal",
-      toDoList: ToDoList(
-        name: "Personal",
-        color: taskColors[2],
-        tasks: [
-          Task(
-            title: "Go to the gym",
-            color: taskColors[2],
-            done: false,
-          ),
-          Task(
-            title: "Read a book",
-            color: taskColors[2],
-            done: false,
-          ),
-          Task(
-            title: "Learn something new",
-            color: taskColors[2],
-            done: false,
-          ),
-        ],
-      ),
-    ),];
+        );
+      },
+    );
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   loadCategories().then((value) {
-  //     setState(() {
-  //       categories = value;
-  //     });
-  //   });
-  // }
-
-  // Future<List<Category>> loadCategories() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   // prefs.clear();
-  //   List<String> categoryStrings = prefs.getStringList('categories') ?? [];
-
-  //   List<Category> categories = categoryStrings.map((e) {
-  //     Map<String, dynamic> categoryMap = json.decode(e);
-  //     return Category.fromJson(categoryMap);
-  //   }).toList();
-
-  //   return categories;
-  // }
-
-  // Future<void> saveCategories(List<Category> categories) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   List<String> categoryStrings = categories.map((e) {
-  //     return json.encode(e.toJson());
-  //   }).toList();
-
-  //   await prefs.setStringList('categories', categoryStrings);
-  // }
+    if (!confirm) return;
+    setState(() => categories.removeAt(index));
+    SharedPreferencesService.saveCategories(categories);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,25 +125,15 @@ class _MultipleCategoryViewWidgetState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "CATEGORIES",
-              style: TextStyle(
-                color: greyTextColor,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-              ),
-            ),
+            const GreyText(text: 'CATEGORIES'),
             IconButton(
               icon: const Icon(Icons.add, color: greyTextColor),
               onPressed: () async {
-                Category newCategory = Category(
+                ToDoList newToDoList = ToDoList(
                   name: "New Category",
-                  toDoList: ToDoList(
-                    name: "New Category",
-                    color: taskColors[0],
-                    tasks: [],
-                  ),
+                  color: taskColors[0],
+                  tasks: [],
+                  key: UniqueKey(),
                 );
                 TextEditingController controller =
                     TextEditingController(text: "New Category");
@@ -206,13 +187,13 @@ class _MultipleCategoryViewWidgetState
                                 onPressed: () => controller.clear(),
                               ),
                             ),
-                            onChanged: (value) => newCategory.name = value,
+                            onChanged: (value) => newToDoList.name = value,
                           ),
                           const SizedBox(height: 20),
                           ColorPickerRow(
                             initialColor: taskColors[0],
                             onColorSelected: (selectedColor) =>
-                                newCategory.toDoList.color = selectedColor,
+                                newToDoList.color = selectedColor,
                           ),
                         ],
                       ),
@@ -248,8 +229,8 @@ class _MultipleCategoryViewWidgetState
                               letterSpacing: 1.5,
                             ),
                           ),
-                          onPressed: () async {
-                            // await saveCategories(categories);
+                          onPressed: () {
+                            SharedPreferencesService.saveCategories(categories);
                             Navigator.pop(context, true);
                           },
                         ),
@@ -262,8 +243,8 @@ class _MultipleCategoryViewWidgetState
                 );
 
                 if (selectedOption != null && selectedOption) {
-                  setState(() => categories.add(newCategory));
-                  // saveCategories(categories);
+                  setState(() => categories.add(newToDoList));
+                  SharedPreferencesService.saveCategories(categories);
                 }
               },
             ),
@@ -274,18 +255,25 @@ class _MultipleCategoryViewWidgetState
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              for (int i = 0; i < categories.length - 1; i++)
+              for (int i = 1; i < categories.length - 1; i++)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: CategoryViewWidget(
-                    category: categories[i],
+                  child: CategoryFrontView(
+                    toDoList: categories[i],
+                    onDeleteTapped: () => deleteCategory(i),
                   ),
                 ),
-              if (categories.isNotEmpty) CategoryViewWidget(
-                category: categories[categories.length - 1],
-              ),
+              if (categories.length > 1)
+                CategoryFrontView(
+                  toDoList: categories[categories.length - 1],
+                  onDeleteTapped: () => deleteCategory(categories.length - 1),
+                ),
             ],
           ),
+        ),
+        const SizedBox(height: 15),
+        ToDoListWidget(
+          toDoList: categories[0],
         ),
       ],
     );
