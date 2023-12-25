@@ -16,15 +16,14 @@ class MultipleCategoryViewWidget extends StatefulWidget {
 
 class _MultipleCategoryViewWidgetState
     extends State<MultipleCategoryViewWidget> {
-  List<ToDoList> categories = [
-    ToDoList(
-      name: "Today's Tasks",
-      color: greyTextColor,
-      tasks: [],
-      isTodays: true,
-      key: UniqueKey().toString(),
-    ),
-  ];
+  List<ToDoList> categories = [];
+  ToDoList todaysTasks = ToDoList(
+    name: "Today's Tasks",
+    color: greyTextColor,
+    tasks: [],
+    isTodays: true,
+    key: UniqueKey().toString(),
+  );
 
   @override
   void initState() {
@@ -32,6 +31,7 @@ class _MultipleCategoryViewWidgetState
     Future.microtask(() {
       setState(() {
         loadCategoriesFromPrefs();
+        loadTodaysTasksFromPrefs();
       });
     });
   }
@@ -47,7 +47,21 @@ class _MultipleCategoryViewWidgetState
     }
   }
 
-  void saveCategoriesFromPrefs() {
+  void loadTodaysTasksFromPrefs() async {
+    ToDoList tempTodaysTasks = await SharedPreferencesService.loadTodaysTasks();
+
+    if (tempTodaysTasks.tasks.isNotEmpty) {
+      setState(() {
+        todaysTasks = tempTodaysTasks;
+      });
+    }
+  }
+
+  void saveTodaysTasksToPrefs() {
+    SharedPreferencesService.saveTodaysTasks(todaysTasks);
+  }
+
+  void saveCategoriesToPrefs() {
     SharedPreferencesService.saveCategories(categories);
   }
 
@@ -223,7 +237,7 @@ class _MultipleCategoryViewWidgetState
                             ),
                           ),
                           child: const Text(
-                            'Save',
+                            'Add',
                             style: TextStyle(
                               color: primaryTextColor,
                               fontWeight: FontWeight.bold,
@@ -257,7 +271,7 @@ class _MultipleCategoryViewWidgetState
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              for (int i = 1; i < categories.length - 1; i++)
+              for (int i = 0; i < categories.length - 1; i++)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: CategoryFrontView(
@@ -265,7 +279,7 @@ class _MultipleCategoryViewWidgetState
                     onDeleteTapped: () => deleteCategory(i),
                   ),
                 ),
-              if (categories.length > 1)
+              if (categories.isNotEmpty)
                 CategoryFrontView(
                   toDoList: categories[categories.length - 1],
                   onDeleteTapped: () => deleteCategory(categories.length - 1),
@@ -275,7 +289,7 @@ class _MultipleCategoryViewWidgetState
         ),
         const SizedBox(height: 15),
         ToDoListWidget(
-          toDoList: categories[0],
+          toDoList: todaysTasks,
         ),
       ],
     );

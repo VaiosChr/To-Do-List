@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:to_do_list/const/colors.dart';
 
 import 'package:to_do_list/widgets/to_do_list/to_do_list_widget.dart';
 
@@ -25,9 +27,32 @@ class SharedPreferencesService {
     return [];
   }
 
+  static Future<void> saveTodaysTasks(ToDoList toDoList) async {
+    final prefs = await SharedPreferences.getInstance();
+    final todaysTasksJson = toDoList.toJson();
+    await prefs.setString('todaysTasks', jsonEncode(todaysTasksJson));
+  }
+
+  static Future<ToDoList> loadTodaysTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final todaysTasksJson = prefs.getString('todaysTasks');
+    if (todaysTasksJson != null) {
+      final todaysTasks = jsonDecode(todaysTasksJson);
+      return ToDoList.fromJson(todaysTasks);
+    }
+
+    return ToDoList(
+      name: 'Today\'s Tasks',
+      color: greyTextColor,
+      tasks: [],
+      key: UniqueKey().toString(),
+      isTodays: true,
+    );
+  }
+
   static Future<void> updateList(ToDoList toDoList) async {
-    ///@TODO: when there is no category the today's doesn't save
     ///@TODO: some times when reloading too many times, the name gets erased
+    /// the issue occurs when adding a task and reloading from inside a category
     List<ToDoList> categories = [];
     categories = await loadCategories();
 
