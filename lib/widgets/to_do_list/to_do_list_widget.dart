@@ -105,6 +105,9 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
           TaskWidget(
             task: widget.toDoList.tasks[i],
             onDeleteTapped: () {
+              setState(() {
+                widget.toDoList.tasks.removeAt(i);
+              });
               if (widget.toDoList.isTodays) {
                 SharedPreferencesService.saveTodaysTasks(widget.toDoList);
               } else {

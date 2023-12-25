@@ -51,13 +51,14 @@ class SharedPreferencesService {
   }
 
   static Future<void> updateList(ToDoList toDoList) async {
-    ///@TODO: some times when reloading too many times, the name gets erased
-    /// the issue occurs when adding a task and reloading from inside a category
     List<ToDoList> categories = [];
     categories = await loadCategories();
 
     for (int i = 0; i < categories.length; i++) {
       if (categories[i].key == toDoList.key) {
+        if (toDoList.name == "") {
+          toDoList.name = categories[i].name;
+        }
         categories[i] = toDoList;
         saveCategories(categories);
         break;
