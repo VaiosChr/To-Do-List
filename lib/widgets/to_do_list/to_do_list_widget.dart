@@ -81,7 +81,8 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
         Row(
           children: [
             GreyText(
-                text: widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS"),
+              text: widget.toDoList.isTodays ? "TODAY'S TASKS" : "TASKS",
+            ),
             const Spacer(),
             AddButton(
               onPressed: () {
@@ -101,27 +102,33 @@ class _ToDoListWidgetState extends State<ToDoListWidget> {
             ),
           ],
         ),
-        for (int i = 0; i < widget.toDoList.tasks.length; i++)
-          TaskWidget(
-            task: widget.toDoList.tasks[i],
-            onDeleteTapped: () {
-              setState(() {
-                widget.toDoList.tasks.removeAt(i);
-              });
-              if (widget.toDoList.isTodays) {
-                SharedPreferencesService.saveTodaysTasks(widget.toDoList);
-              } else {
-                SharedPreferencesService.updateList(widget.toDoList);
-              }
-            },
-            onChanged: () {
-              if (widget.toDoList.isTodays) {
-                SharedPreferencesService.saveTodaysTasks(widget.toDoList);
-              } else {
-                SharedPreferencesService.updateList(widget.toDoList);
-              }
-            },
-          ),
+        ListView.builder(
+          shrinkWrap: true,
+          // physics: const NeverScrollableScrollPhysics(),
+          itemCount: widget.toDoList.tasks.length,
+          itemBuilder: (context, index) {
+            return TaskWidget(
+              task: widget.toDoList.tasks[index],
+              onDeleteTapped: () {
+                setState(() {
+                  widget.toDoList.tasks.removeAt(index);
+                });
+                if (widget.toDoList.isTodays) {
+                  SharedPreferencesService.saveTodaysTasks(widget.toDoList);
+                } else {
+                  SharedPreferencesService.updateList(widget.toDoList);
+                }
+              },
+              onChanged: () {
+                if (widget.toDoList.isTodays) {
+                  SharedPreferencesService.saveTodaysTasks(widget.toDoList);
+                } else {
+                  SharedPreferencesService.updateList(widget.toDoList);
+                }
+              },
+            );
+          },
+        ),
       ],
     );
   }

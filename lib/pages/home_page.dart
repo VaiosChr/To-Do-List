@@ -11,8 +11,6 @@ class HomePage extends StatelessWidget {
     return const Scaffold(
       //@TODO: figure out scrolling
       body: SafeArea(
-        bottom: true,
-        top: true,
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Column(

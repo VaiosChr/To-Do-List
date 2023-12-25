@@ -1,15 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:to_do_list/pages/home_page.dart';
-import 'package:provider/provider.dart';
 
-import 'package:to_do_list/notifier.dart';
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => MyNotifier(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
