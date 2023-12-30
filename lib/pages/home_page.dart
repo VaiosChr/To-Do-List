@@ -10,16 +10,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       //@TODO: figure out scrolling
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              TitleText(text: "What's up, Vaios?"),
-              SizedBox(height: 30),
-              MultipleCategoryViewWidget(),
-            ],
-          ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TitleText(text: "What's up, Vaios?"),
+            SizedBox(height: 30),
+            MultipleCategoryViewWidget(),
+          ],
         ),
       ),
     );
