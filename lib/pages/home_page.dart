@@ -12,12 +12,14 @@ class HomePage extends StatelessWidget {
       //@TODO: figure out scrolling
       body: Padding(
         padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TitleText(text: "What's up, Vaios?"),
-            SizedBox(height: 30),
-            MultipleCategoryViewWidget(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TitleText(text: "What's up, Vaios?"),
+              SizedBox(height: 30),
+              MultipleCategoryViewWidget(),
+            ],
+          ),
         ),
       ),
     );
