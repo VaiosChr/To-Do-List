@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 
-import 'package:to_do_list/const/colors.dart';
 import 'package:to_do_list/preferences.dart';
 import 'package:to_do_list/widgets/custom_widgets.dart';
 import 'package:to_do_list/widgets/to_do_list/task.dart';

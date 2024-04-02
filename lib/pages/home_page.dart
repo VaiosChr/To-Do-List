@@ -8,18 +8,16 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       //@TODO: figure out scrolling
       body: Padding(
-        padding: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TitleText(text: "What's up, Vaios?"),
-              SizedBox(height: 30),
-              MultipleCategoryViewWidget(),
-            ],
-          ),
+        padding: const EdgeInsets.all(20),
+        child: ListView(
+          children: const [
+            TitleText(text: "What's up, Vaios?"),
+            SizedBox(height: 30),
+            MultipleCategoryViewWidget(),
+          ],
         ),
       ),
     );
